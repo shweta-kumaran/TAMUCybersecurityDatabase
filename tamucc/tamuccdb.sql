@@ -18,3 +18,23 @@ CREATE TABLE users (
     Discord_Name VARCHAR(100),
     PRIMARY KEY (UIN)
 );
+
+CREATE TABLE Classes (
+    Class_ID INT(10) NOT NULL,
+    Class_Name VARCHAR(256) NOT NULL,
+    Class_Desc VARCHAR(256) NOT NULL,
+    Class_Type VARCHAR(256) NOT NULL,
+    PRIMARY KEY (Class_ID)
+);
+
+CREATE TABLE Class_Enrollment(
+    CE_Num INT(10) NOT NULL,
+    UIN INT(11) NOT NULL,
+    Class_ID INT(10) NOT NULL,
+    Stat VARCHAR(255) NOT NULL,
+    Semester VARCHAR(255) NOT NULL,
+    Year INT(4) NOT NULL,
+    PRIMARY KEY (CE_Num),
+    FOREIGN KEY (UIN) REFERENCES users(UIN),
+    FOREIGN KEY (Class_ID) REFERENCES Classes(Class_ID)
+);
