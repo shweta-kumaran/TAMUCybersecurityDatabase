@@ -19,11 +19,31 @@ CREATE TABLE users (
     PRIMARY KEY (UIN)
 );
 
+CREATE TABLE Students(
+    UIN INT(11) PRIMARY KEY,
+    Gender VARCHAR(255) NOT NULL,
+    Hispanic BIT NOT NULL,
+    Race VARCHAR(255) NOT NULL,
+    USCitizen BIT NOT NULL,
+    First_Generation BIT NOT NULL,
+    DOB VARCHAR(255) NOT NULL,
+    GPA DECIMAL(3,2) NOT NULL,
+    Major VARCHAR(255) NOT NULL,
+    Minor1 VARCHAR(255),
+    Minor2 VARCHAR(255),
+    Expected_Grad VARCHAR(255),
+    School VARCHAR(255) NOT NULL,
+    Current_Classification VARCHAR(255) NOT NULL,
+    Stdent_Type VARCHAR(255) NOT NULL,
+    Phone_Num VARCHAR(10) NOT NULL,
+    FOREIGN KEY (UIN) REFERENCES users(UIN)
+);
+
 CREATE TABLE Classes (
     Class_ID INT(10) NOT NULL,
-    Class_Name VARCHAR(256) NOT NULL,
-    Class_Desc VARCHAR(256) NOT NULL,
-    Class_Type VARCHAR(256) NOT NULL,
+    Class_Name VARCHAR(255) NOT NULL,
+    Class_Desc VARCHAR(255) NOT NULL,
+    Class_Type VARCHAR(255) NOT NULL,
     PRIMARY KEY (Class_ID)
 );
 
@@ -35,6 +55,6 @@ CREATE TABLE Class_Enrollment(
     Semester VARCHAR(255) NOT NULL,
     Year INT(4) NOT NULL,
     PRIMARY KEY (CE_Num),
-    FOREIGN KEY (UIN) REFERENCES users(UIN),
+    FOREIGN KEY (UIN) REFERENCES Students(UIN),
     FOREIGN KEY (Class_ID) REFERENCES Classes(Class_ID)
 );
