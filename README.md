@@ -6,6 +6,6 @@
 4. Open up localhost/myphpadmin
 5. Create a new database named 'tamuccdb'
 6. Open up the database and click on the SQL tab
-7. Put the commands from the tamuccdb.sql file and create the database locally
+7. Import the tamuccdb.sql file and create the database locally
 8. Run the application by opening localhost/tamucc
 
