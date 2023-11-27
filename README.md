@@ -9,3 +9,8 @@
 7. Import the tamuccdb.sql file and create the database locally
 8. Run the application by opening localhost/tamucc
 
+Admin / Student
+#1 Preston
+#2 Shweta
+#3 Pavithra
+#4 Juliana
