@@ -1,5 +1,12 @@
 <?php
     include_once 'includes/dbh.inc.php'
+
+    $connection = mysqli_connect($server_name, $user_name, $password);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    echo "Connected successfully";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +17,7 @@
     <title>Document</title>
 </head>
 <body>
+
     
 </body>
 </html>
