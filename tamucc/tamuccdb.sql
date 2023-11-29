@@ -85,6 +85,20 @@ CREATE TABLE `class_enrollment` (
 -- Table structure for table `collegestudents`
 --
 
+CREATE TABLE `users` (
+  `UIN` int(11) NOT NULL,
+  `First_Name` varchar(255) NOT NULL,
+  `M_Initial` varchar(1) DEFAULT NULL,
+  `Last_Name` varchar(255) NOT NULL,
+  `Username` varchar(150) NOT NULL,
+  `Passwords` varchar(255) NOT NULL,
+  `User_Type` varchar(50) NOT NULL,
+  `Email` varchar(150) NOT NULL,
+  `Discord_Name` varchar(150) NOT NULL,
+  `Discriminator` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 CREATE TABLE `collegestudents` (
   `UIN` int(11) NOT NULL,
   `Gender` varchar(50) NOT NULL,
@@ -101,7 +115,8 @@ CREATE TABLE `collegestudents` (
   `School` varchar(150) NOT NULL,
   `Current_Classification` varchar(150) NOT NULL,
   `Phone` int(15) NOT NULL,
-  `Student_Type` varchar(150) NOT NULL
+  `Student_Type` varchar(150) NOT NULL,
+  FOREIGN KEY (`UIN`) REFERENCES `users`(`UIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -121,18 +136,6 @@ CREATE TABLE `programs` (
 --
 -- Table structure for table `users`
 --
-
-CREATE TABLE `users` (
-  `UIN` int(11) NOT NULL,
-  `First_Name` varchar(255) NOT NULL,
-  `M_Initial` varchar(1) DEFAULT NULL,
-  `Last_Name` varchar(255) NOT NULL,
-  `Username` varchar(150) NOT NULL,
-  `Passwords` varchar(255) NOT NULL,
-  `User_Type` varchar(50) NOT NULL,
-  `Email` varchar(150) NOT NULL,
-  `Discord_Name` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
