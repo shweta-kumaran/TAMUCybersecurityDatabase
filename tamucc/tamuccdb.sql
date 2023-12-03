@@ -131,7 +131,7 @@ CREATE TABLE `users` (
   `Passwords` varchar(255) NOT NULL,
   `User_Type` varchar(50) NOT NULL,
   `Email` varchar(150) NOT NULL,
-  `Discord_Name` varchar(150) NOT NULL
+  `Discord_Name` varchar(150) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -214,3 +214,87 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+INSERT INTO `users` (
+    `UIN`,
+    `First_Name`,
+    `M_Initial`,
+    `Last_Name`,
+    `Username`,
+    `Passwords`,
+    `User_Type`,
+    `Email`,
+    `Discord_Name`,
+    `Role`
+) VALUES (
+    1, -- Replace with a suitable unique UIN
+    'Admin',
+    NULL,
+    'User',
+    'admin',
+    'admin', -- Replace with the actual hashed password (e.g., bcrypt)
+    'admin', -- Assuming 'Admin' is the user type for administrators
+    'admin@example.com', -- Replace with a valid email address
+    'admin#1234', -- Replace with a valid Discord name and discriminator
+    'admin' -- Replace with the desired role for admin users
+);
+
+INSERT INTO `users` (
+    `UIN`,
+    `First_Name`,
+    `M_Initial`,
+    `Last_Name`,
+    `Username`,
+    `Passwords`,
+    `User_Type`,
+    `Email`,
+    `Discord_Name`,
+    `Role`
+) VALUES (
+    2, -- Replace with a suitable unique UIN
+    'John',
+    'M',
+    'Doe',
+    'john.doe',
+    'password', -- Replace with the actual hashed password (e.g., bcrypt)
+    'Student', -- Assuming 'Student' is the user type for college students
+    'john.doe@example.com', -- Replace with a valid email address
+    'john.doe#5678', -- Replace with a valid Discord name and discriminator
+    'student' -- Replace with the desired role for student users
+);
+
+INSERT INTO `collegestudents` (
+    `UIN`,
+    `Gender`,
+    `HispanicLatino`,
+    `Race`,
+    `USCitizen`,
+    `First_Generation`,
+    `DoB`,
+    `GPA`,
+    `Major`,
+    `Minor1`,
+    `Minor2`,
+    `Expected_Graduation`,
+    `School`,
+    `Current_Classification`,
+    `Phone`,
+    `Student_Type`
+) VALUES (
+    2, -- Same UIN as in the users table
+    'Male',
+    0, -- 0 for false, assuming not Hispanic/Latino
+    'Caucasian',
+    1, -- 1 for true, assuming US citizen
+    0, -- 0 for false, assuming not first generation
+    '1990-01-15', -- Replace with the actual date of birth
+    3.5, -- Replace with the actual GPA
+    'Computer Science',
+    'Mathematics',
+    'Psychology',
+    2023, -- Replace with the actual expected graduation year
+    'School of Science and Engineering',
+    'Senior',
+    1234567890, -- Replace with the actual phone number
+    'Undergraduate' -- Replace with the actual student type
+);

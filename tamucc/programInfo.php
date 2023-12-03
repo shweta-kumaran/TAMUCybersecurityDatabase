@@ -1,8 +1,6 @@
 <?php
     include_once 'includes/dbh.inc.php';
 
-    session_start();
-
     $server_name = "localhost";
     $user_name = "pma";
 
@@ -11,7 +9,7 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    // echo "Connected successfully";
+    echo "Connected successfully";
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
@@ -32,9 +30,6 @@
             if ($user['Passwords'] == $password) {
                 // Authentication successful
                 // Set session variables, e.g., $_SESSION['user_id'] = $user['id']
-                $_SESSION['user_id'] = $username; 
-                $_SESSION['UIN'] = $user['UIN'];
-                $_SESSION['role'] = $user['User_Type'];
                 echo "Authentication successful";
             } else {
                 // Incorrect password
@@ -63,9 +58,7 @@
         <input type="password" name="password" id="password" required>
 
         <button type="submit">Submit</button>
-    </form>
-
-    <a href="userAuth.php">User Authentication</a>
+</form>
 
     
 </body>
