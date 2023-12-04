@@ -18,6 +18,21 @@
         // Close the statement
         $stmt->close();
     }
+
+    function columnExists($tableName, $columnName, $conn) {
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        // SQL query
+        $sql = "SELECT COUNT(*)
+                FROM information_schema.columns
+                WHERE table_name = '$tableName' AND column_name = '$columnName'";
+        // Execute query
+        $result = $conn->query($sql);
+        // Check if the column exists
+        $exists = $result->fetch_row()[0] > 0;
+        return $exists;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +64,11 @@
 
         <label for="user_type">User Type:</label>
         <select name="user_type" id="user_type">
-            <option value="admin">Admin</option>
+            <?php
+                if($_SESSION['role'] == "admin"){
+                    echo "<option value='admin'>Admin</option>";
+                }
+            ?>
             <option value="student">Student</option>
         </select> <br>
 
@@ -243,12 +262,80 @@
 <!-- Form 2 -->
     <form method="post" action="">
         <input type="hidden" name="form_id" value="update">
-        <!-- Other form fields for Form 2 -->
+
+        <?php
+        if($_SESSION['role'] == 'admin'){
+            echo "<label for='uinToChange'>UIN to Change:</label>";
+            echo "<input type='text' name='uinToChange' id='uinToChange' value='' required><br>";
+        }else{
+            $userUIN = $_SESSION['UIN'];
+            echo "<input type='hidden' name='form_id' value='$userUIN'>";
+        }
+
+        ?>
+
+        <label for="columnToChange">Attribute to Change:</label>
+        <select name="columnToChange" id="columnToChange">
+            <option value="First_Name">First Name</option>
+            <option value="M_Initial">Middle Initial</option>
+            <option value="Last_Name">Last Name</option>
+            <option value="Username">Username</option>
+            <option value="Passwords">Password</option>
+            <option value="User_Type">User Type</option>
+            <option value="Email">Email</option>
+            <option value="Discord_Name">Discord Name</option>
+            <option value="Gender">Gender</option>
+            <option value="HispanicLatino">Hispanic/Latino</option>
+            <option value="Race">Race</option>
+            <option value="USCitizen">US Citizen</option>
+            <option value="First_Generation">First Generation</option>
+            <option value="DoB">Date of Birth</option>
+            <option value="GPA">GPA</option>
+            <option value="Major">Major</option>
+            <option value="Minor1">Minor1</option>
+            <option value="Minor2">Minor2</option>
+            <option value="Expected_Graduation">Expected Graduation</option>
+            <option value="School">School</option>
+            <option value="Current_Classification">Current Classification</option>
+            <option value="Phone">Phone Number</option>
+            <option value="Student_type">Student Type</option>
+        </select><br>
+
+        <label for="newValue">New Value:</label>
+        <input type="text" name="newValue" id="newValue" value="" required><br>
+
         <input type="submit" value="Submit Form 2">
     </form>
 
     <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $formId = $_POST['form_id'];
 
+            if($formId == "update"){
+                $uinToChange = $_POST['uinToChange'];
+                $attributeToChange = $_POST['columnToChange'];
+                $newValue = $_POST['newValue'];
+
+                if(userExists($uinToChange, $conn)){
+                    $sql = "";
+
+                    if(columnExists('users', $attributeToChange, $conn)){
+                        $sql = "UPDATE users SET $attributeToChange = '$newValue' WHERE UIN = $uinToChange";
+                    }else{
+                        $sql = "UPDATE collegestudents SET $attributeToChange = '$newValue' WHERE UIN = $uinToChange";
+                    }
+
+                    if ($conn->query($sql) === TRUE) {
+                        echo "$attributeToChange updated successfully to $newValue for $uinToChange";
+                    } else {
+                        echo "Error updating $attributeToChange: " . $conn->error;
+                    }
+
+                }else{
+                    echo "User with that UIN not found.";
+                }
+            }
+        }
     ?>
 
 <!-- Form 3 -->
@@ -292,7 +379,7 @@
                 // Output data of each user
                 while ($row = $result->fetch_assoc()) {
                     echo "User ID: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
-                    if($row["User_Type"] == "Student"){
+                    if($row["User_Type"] == "student"){
                         $studentUIN = $row["UIN"];
                         $studentSql = "SELECT * FROM collegestudents WHERE UIN=$studentUIN";
                         $studentResult = $conn->query($studentSql);
