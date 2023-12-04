@@ -19,6 +19,23 @@
         $stmt->close();
     }
 
+    function collegestudentExists($uin, $conn) {
+        // Prepare the statement
+        $stmt = $conn->prepare("SELECT UIN FROM collegestudents WHERE UIN = ?");
+        // Bind the parameter
+        $stmt->bind_param("i", $uin); // Assuming UIN is an integer, use "s" if it's a string     
+        // Execute the statement
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+        // Close the statement
+        $stmt->close();
+    }
+
     function columnExists($tableName, $columnName, $conn) {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
@@ -350,6 +367,7 @@
                 echo "<option value='all'>All</option>";
                 echo "<option value='student'>Student</option>";
                 echo "<option value='admin'>Admin</option>";
+                echo "<option value='deactivated'>Deactivated</option>";
             }
         ?>
         <option value="own">Own Profile</option>
@@ -399,14 +417,69 @@
 ?>
 <!-- Form 4 -->
 <h1>Deletion</h1>
-<form method="post" action="">
-    <input type="hidden" name="form_id" value="delete">
-    <!-- Other form fields for Form 4 -->
-    <input type="submit" value="Submit Form 4">
+    <?php
+        if($_SESSION['role'] == 'admin'){
+            echo "<form method='post' action=''>";
+            echo "  <input type='hidden' name='form_id' value='delete'>";
+            echo "  <label for='uinToChange'>UIN to Delete:</label>";
+            echo "  <input type='text' name='uinToChange' id='uinToChange' value='' required><br>";
+            echo "  <input type='submit' value='Delete UIN'><br>";
+            echo "</form>";
+        }
+    ?>
+
+<form method='post' action=''>
+    <input type='hidden' name='form_id' value='deactivate'>
+    <?php
+        if($_SESSION['role'] == 'admin'){
+            echo "<label for='uinToChange'>UIN to Deactivate:</label>";
+            echo "<input type='text' name='uinToChange' id='uinToChange' value='' required><br>";
+        }else{
+            $userUIN = $_SESSION['UIN'];
+            echo "<input type='hidden' name='form_id' value='$userUIN'>";
+        }
+    ?>
+        <input type ='submit' value='Deactivate'> 
 </form>
 
 <?php
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $formId = $_POST['form_id'];
+        if($formId == 'delete'){
+            $uinToChange = $_POST['uinToChange'];
+            if(collegestudentExists($uinToChange, $conn)){
+                $sql = "DELETE FROM `collegestudents` WHERE UIN = '$uinToChange'";
+                if ($conn->query($sql) === TRUE) {
+                    echo "$uinToChange deleted.";
+                } else {
+                    echo "Error deleting student.";
+                }
+            }
 
+            if(userExists($uinToChange, $conn)){
+                $sql = "DELETE FROM `users` WHERE UIN = '$uinToChange'";
+                if ($conn->query($sql) === TRUE) {
+                    echo "$uinToChange deleted.";
+                } else {
+                    echo "Error deleting student.";
+                }
+            }else{
+                echo "User doesn't exist.";
+            }
+        }
+
+        if($formId == 'deactivate'){
+            $uinToChange = $_POST['uinToChange'];
+            if(userExists($uinToChange, $conn)){
+                $sql = "UPDATE users SET User_Type = 'deactivated' WHERE UIN = $uinToChange";
+                if ($conn->query($sql) === TRUE) {
+                    echo "$uinToChange deactivated.";
+                } else {
+                    echo "Error deleting student.";
+                }
+            }
+        }
+    }
 ?>
     
 </body>
