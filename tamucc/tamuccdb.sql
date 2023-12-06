@@ -256,7 +256,7 @@ INSERT INTO `users` (
     'password', -- Replace with the actual hashed password (e.g., bcrypt)
     'student', -- Assuming 'Student' is the user type for college students
     'john.doe@example.com', -- Replace with a valid email address
-    'john.doe#5678', -- Replace with a valid Discord name and discriminator
+    'john.doe#5678' -- Replace with a valid Discord name and discriminator
 );
 
 INSERT INTO `collegestudents` (
