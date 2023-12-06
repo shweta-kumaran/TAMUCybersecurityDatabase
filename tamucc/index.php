@@ -68,6 +68,7 @@
 
     <a href="userAuth.php">User Authentication</a> <br>
     <a href="eventMan.php">Event Management</a>
+    <a href="addClass.html">Add New Class</a>
 
 
     
