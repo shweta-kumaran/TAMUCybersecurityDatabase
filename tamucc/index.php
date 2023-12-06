@@ -66,9 +66,12 @@
     </form>
 
     <a href="userAuth.php">User Authentication</a> <br>
-    <a href="eventMan.php">Event Management</a>
-
-
+    <a href="studentDocuments.php">Student Documents</a> <br>
+    <?php
+        if($_SESSION['role'] == 'admin'){
+                echo "<a href='eventMan.php'>Event Management</a> <br>";
+        }    
+    ?>
     
 </body>
 </html>
