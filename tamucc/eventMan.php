@@ -163,7 +163,7 @@
 
         <label for = "delete_event_ID">Select the event by EventID to delete:</label>
         <select name = "delete_event_ID" id = "delete_event_ID">
-            <option value="none" selected disabled hidden>Select an Option</option>
+            <option value="none" selected disabled hidden>Select an ID</option>
             <?php
                 $query = "SELECT * FROM event";
                 $result = $conn->query($query);
@@ -261,7 +261,79 @@
             }
         }
     ?>
+
+    <!-- Event Attendance form -->
+    <h3>View and edit student attendance for events </h3>
+    <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="select_attendance">
+
+        <label for = "select_event_ID">Select an event ID to view attendance:</label>
+        <select name = "select_event_ID" id = "select_event_ID">
+        <option value="none" selected disabled hidden>Select an ID</option>
+
+            <?php
+                $query = "SELECT * FROM event";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                    }
+                } 
+            ?>
+        </select>
+        <input type="submit" value="Select Events Form">
+    </form>
+
+            
+
+    <!-- Event Attendance php -->
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formID = $_POST['form_id'];
+            if($formID == "select_attendance"){
+                // Get the selected role from the form
+                $selectedID = $_POST['select_event_ID'];
+                // Query to fetch users based on the selected Event ID
+
+                $sqlSelect = "SELECT * FROM event_attendance WHERE Event_ID = '$selectedID'";
+                
+                $result = $conn->query($sqlSelect);
+            
+                if ($result->num_rows > 0) {
+                    // Output data of each event
+                    while ($row = $result->fetch_assoc()) {
+                        echo "Event ID: " . $row["Event_ID"] . " - Name : " . $row["First_Name"] . " " . $row["Last_Name"] . " - UIN: " . $row["UIN"];
+                        echo "<br>";
+                    }
+                } else {
+                    echo "No attendance found for the selected Event ID.";
+                }
+            }
+        }
+    ?>
+
+    <!-- <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="select_attendance">
+
+        <label for = "select_event_ID">Select an event ID and UIN to edit student attendance:</label>
+        <select name = "select_event_ID" id = "select_event_ID">
+        <option value="none" selected disabled hidden>Select an ID</option>
+
+            <?php
+                $query = "SELECT * FROM event";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                    }
+                } 
+            ?>
+        </select>
+        <input type="submit" value="Select Events Form">
+    </form> -->
     
+
+    <!-- MISSING PHP FOR LAST FORM!!! FIXME -->
 
 </body>
 </html>
