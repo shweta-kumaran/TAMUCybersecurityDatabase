@@ -1,10 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "username";
-$password = "password";
-$dbname = "tamuccdb";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+include_once 'includes/dbh.inc.php';
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

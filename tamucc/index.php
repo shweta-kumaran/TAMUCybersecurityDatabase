@@ -70,6 +70,8 @@
     <a href="eventMan.php">Event Management</a>
     <a href="addClass.html">Add New Class</a>
 
+    
+
 
     
 </body>
