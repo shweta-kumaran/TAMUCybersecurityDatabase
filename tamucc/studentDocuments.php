@@ -35,20 +35,21 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="select">
 
-        <!-- <label for = "select_event_ID">Select all events or an event ID:</label>
-        <select name = "select_event_ID" id = "select_event_ID">
-            <option value = "all"> All events </option>
+        <label for = "select_doc_num">Select all events or an event ID:</label>
+        <select name = "select_doc_num" id = "select_doc_num">
+            <option value = "all"> All Documents </option>
 
-            <?php
-                $query = "SELECT * FROM event";
-                $result = $conn->query($query);
+            <?php               
+                $currUIN = $_SESSION['UIN'];
+                $sqlInsert = "SELECT * FROM `documentation` WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
+                $result = $conn->query($sqlInsert);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                        echo "<option value='" . $row["Doc_Num"] . "'>" . $row["Doc_Num"] . "</option>";
                     }
                 } 
             ?>
-        </select> -->
+        </select>
         <input type="submit" value="Select Events Form">
     </form>
 
@@ -56,28 +57,29 @@
 
     <!-- Selection php -->
     <?php
+        $currUIN = $_SESSION['UIN'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
             if($formID == "select"){
-                // // Get the selected role from the form
-                // $selectedID = $_POST['select_event_ID'];
-                // // Query to fetch users based on the selected Event ID
-                // if ( $selectedID == "all" ) {
-                //     $sqlSelect = "SELECT * FROM event";
-                // } else {
-                //     $sqlSelect = "SELECT * FROM event WHERE Event_ID = '$selectedID'";
-                // }
-                // $result = $conn->query($sqlSelect);
+                // Get the selected ID from the form
+                $selectedID = $_POST['select_doc_num'];
+                // Query to fetch users based on the selected Event ID
+                if ( $selectedID == "all" ) {
+                    $sqlSelect = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
+                } else {
+                    $sqlSelect = "SELECT * FROM documentation WHERE Doc_Num = '$selectedID'";
+                }
+                $result = $conn->query($sqlSelect);
             
-                // if ($result->num_rows > 0) {
-                //     // Output data of each event
-                //     while ($row = $result->fetch_assoc()) {
-                //         echo "Event ID: " . $row["Event_ID"] . " - Program Number: " . $row["Program_Num"] . " - Event Type: " . $row["Event_Type"] . " - Start Date: " . $row["Start_Date"] . " - End Date: " . $row["End_Date"];
-                //         echo "<br>";
-                //     }
-                // } else {
-                //     echo "No Events found for the selected Event ID.";
-                // }
+                if ($result->num_rows > 0) {
+                    // Output data of each event
+                    while ($row = $result->fetch_assoc()) {
+                        echo "Document Number: " . $row["Doc_Num"] . " - Application Number: " . $row["App_Num"] . " - Document Type: " . $row["Doc_Type"] . " - Document Link: " . $row["Link"];
+                        echo "<br>";
+                    }
+                } else {
+                    echo "No Events found for the selected Event ID.";
+                }
             }
         }
     ?>

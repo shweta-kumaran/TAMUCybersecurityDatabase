@@ -1,10 +1,6 @@
 <?php
     include_once 'includes/dbh.inc.php';
     session_start();
-
-    // $server_name = "localhost";
-    // $user_name = "pma";
-    // $conn = mysqli_connect($server_name, $user_name);
     
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -12,7 +8,7 @@
         echo "Connected successfully";
     }
 
-    if ($_SESSION['role'] != 'admin' or !isset($_SESSION['role'])) //!isset($_SESSION['nID'])
+    if ($_SESSION['role'] != 'admin' or !isset($_SESSION['role']))
     {
         header("Location: index.php");
         die();
@@ -186,11 +182,11 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
             if($formID == "delete"){
-                // Get the selected role from the form
+                // Get the ID to delete from the form
                 $selectedID = $_POST['delete_event_ID'];
                 if(eventExists($selectedID, $conn)){
-                    $sql = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
-                    if ($conn->query($sql) === TRUE) {
+                    $sqlDelete = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
+                    if ($conn->query($sqlDelete) === TRUE) {
                         echo "Event with Event ID $selectedID deleted successfully!";
                     } else {
                         echo "Error deleting event: " . $conn->error;
@@ -243,7 +239,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
             if($formID == "update"){
-                // Get the selected role from the form FIXME
+                // Get the ID, column, and value from the form
                 $updateID = $_POST['update_event_ID'];
                 $updateColumn = $_POST['columnToChange'];
                 $newValue = $_POST['newValue'];
