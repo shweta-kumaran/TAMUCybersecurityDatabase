@@ -175,7 +175,7 @@
             ?>
         </select>
 
-        <input type="submit" value="Insert delete Form">
+        <input type="submit" value="Delete Event Form">
     </form>
 
     <!-- Deletion php -->
@@ -234,7 +234,7 @@
         <label for="newValue">New Value:</label>
         <input type="text" name="newValue" id="newValue" value="" required><br><br>
 
-        <input type="submit" value="Insert update Form">
+        <input type="submit" value="Update Event Form">
     </form>
 
     <!-- Update php -->

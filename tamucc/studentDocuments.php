@@ -159,7 +159,7 @@
             ?>
         </select>
 
-        <input type="submit" value="Insert delete Form">
+        <input type="submit" value="Delete Documents Form">
     </form>
 
     <!-- Deletion php -->
@@ -194,34 +194,32 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="update">
 
-        <label for = "update_Doc_Num">Select the event ID for the event you wish to update:</label>
+        <label for = "update_Doc_Num">Select the Document Number for the document you wish to update:</label>
         <select name = "update_Doc_Num" id = "update_Doc_Num">
+            <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM event";
+                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                        echo "<option value='" . $row["Doc_Num"] . "'>" . $row["Doc_Num"] . "</option>";
                     }
                 } 
             ?>
         </select><br>
         
-        <label for="columnToChange">Event Attribute to Change:</label>
+        <label for="columnToChange">Document Attribute to Change:</label>
         <select name="columnToChange" id="columnToChange">
-            <option value="UIN">UIN</option>
-            <option value="Program_Num">Program Number</option>
-            <option value="Start_Date">Start Date</option>
-            <option value="Time">Time</option>
-            <option value="Location">Location</option>
-            <option value="End_Date">End Date</option>
-            <option value="Event_Type">Event Type</option>
+            <option value="none" selected disabled hidden>Select an Attribute</option>
+            <option value="App_Num">Application Number</option>
+            <option value="Link">Link</option>
+            <option value="Doc_Type">Document Type</option>
         </select><br>
 
         <label for="newValue">New Value:</label>
         <input type="text" name="newValue" id="newValue" value="" required><br><br>
 
-        <input type="submit" value="Insert update Form">
+        <input type="submit" value="Update Documents Form">
     </form>
 
     <!-- Update php -->
@@ -229,22 +227,22 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
             if($formID == "update"){
-                // // Get the selected role from the form FIXME
-                // $updateID = $_POST['update_Doc_Num'];
-                // $updateColumn = $_POST['columnToChange'];
-                // $newValue = $_POST['newValue'];
+                // Get the num, column and value from the form
+                $updateNum = $_POST['update_Doc_Num'];
+                $updateColumn = $_POST['columnToChange'];
+                $newValue = $_POST['newValue'];
 
-                // if(eventExists($updateID, $conn)) {
-                //     $sqlUpdate = "UPDATE event SET $updateColumn = '$newValue' WHERE Event_ID = $updateID";
-                // } else {
-                //     echo "Event with that ID not found.";
-                // }
+                if(docExists($updateNum, $conn)) {
+                    $sqlUpdate = "UPDATE documentation SET $updateColumn = '$newValue' WHERE Doc_Num = $updateNum";
+                } else {
+                    echo "Event with that ID not found.";
+                }
 
-                // if ($conn->query($sqlUpdate) === TRUE) {
-                //     echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateID!";
-                // } else {
-                //     echo "Error updating $updateColumn: " . $conn->error;
-                // }   
+                if ($conn->query($sqlUpdate) === TRUE) {
+                    echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateNum";
+                } else {
+                    echo "Error updating $updateColumn: " . $conn->error;
+                }   
             }
         }
     ?>
