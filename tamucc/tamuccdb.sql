@@ -224,8 +224,7 @@ INSERT INTO `users` (
     `Passwords`,
     `User_Type`,
     `Email`,
-    `Discord_Name`,
-    `Role`
+    `Discord_Name`
 ) VALUES (
     1, -- Replace with a suitable unique UIN
     'Admin',
@@ -236,7 +235,6 @@ INSERT INTO `users` (
     'admin', -- Assuming 'Admin' is the user type for administrators
     'admin@example.com', -- Replace with a valid email address
     'admin#1234', -- Replace with a valid Discord name and discriminator
-    'admin' -- Replace with the desired role for admin users
 );
 
 INSERT INTO `users` (
@@ -248,8 +246,7 @@ INSERT INTO `users` (
     `Passwords`,
     `User_Type`,
     `Email`,
-    `Discord_Name`,
-    `Role`
+    `Discord_Name`
 ) VALUES (
     2, -- Replace with a suitable unique UIN
     'John',
@@ -257,10 +254,9 @@ INSERT INTO `users` (
     'Doe',
     'john.doe',
     'password', -- Replace with the actual hashed password (e.g., bcrypt)
-    'Student', -- Assuming 'Student' is the user type for college students
+    'student', -- Assuming 'Student' is the user type for college students
     'john.doe@example.com', -- Replace with a valid email address
     'john.doe#5678', -- Replace with a valid Discord name and discriminator
-    'student' -- Replace with the desired role for student users
 );
 
 INSERT INTO `collegestudents` (
