@@ -67,14 +67,19 @@
         <button type="submit">Submit</button>
     </form>
 
+    <?php
+        echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";
+    ?>
+
     <a href="userAuth.php">User Authentication</a> <br>
-    <a href="ProgramProgressTracking/addClass.html">Add New Class</a>
-    <a href="ProgramProgressTracking/addInternship.html">Add New Internship</a>
-    <a href="ProgramProgressTracking/addCertification.html">Add New Certification</a>
+    <a href="ProgramProgressTracking/addClass.html">Add New Class</a> <br>
+    <a href="ProgramProgressTracking/addInternship.html">Add New Internship</a> <br>
+    <a href="ProgramProgressTracking/addCertification.html">Add New Certification</a> <br>
     <a href="studentDocuments.php">Student Documents</a> <br>
     <?php
         if($_SESSION['role'] == 'admin'){
-                echo "<a href='eventMan.php'>Event Management</a> <br>";
+            echo "<h3>Admin Only Sites</h3> <br>";    
+            echo "<a href='eventMan.php'>Event Management</a> <br>";
         }    
     ?>
     
