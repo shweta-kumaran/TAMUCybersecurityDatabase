@@ -14,7 +14,22 @@
         die();
     }
 
-    
+    function docExists($givenDoc, $conn) {
+        // Prepare and bind the statement with the given parameter
+        $stmt = $conn->prepare("SELECT Doc_Num FROM documentation WHERE Doc_Num = ?");
+        $stmt->bind_param("i", $givenDoc); // Doc_Num integer
+        
+        // Execute the statement and store the results
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        $stmt->close();
+    }
 
 ?>
 <!DOCTYPE html>
@@ -28,6 +43,9 @@
 <body>
 
     <h1>Document Management</h1>
+    <?php
+        echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";
+    ?>
     <a href="index.php">Home</a>
 
     <!-- Selection form -->
@@ -50,7 +68,7 @@
                 } 
             ?>
         </select>
-        <input type="submit" value="Select Events Form">
+        <input type="submit" value="Select Documents Form">
     </form>
 
             
@@ -78,7 +96,7 @@
                         echo "<br>";
                     }
                 } else {
-                    echo "No Events found for the selected Event ID.";
+                    echo "No documents found for the selected document number.";
                 }
             }
         }
@@ -89,29 +107,16 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="insert">
 
-        <!-- <label for="UIN">UIN:</label>
-        <input type="text" name="UIN" id="UIN" value="" required><br>
+        <label for="App_Num">Application Number:</label>
+        <input type="int" name="App_Num" id="App_Num" value="" required><br>
     
-        <label for="Program_Num">Program Number:</label>
-        <input type="int" name="Program_Num" id="Program_Num" value="" required><br>
+        <label for="Link">Link:</label>
+        <input type="text" name="Link" id="Link" value="" required><br>
 
-        <label for="Start_Date">Start Date:</label>
-        <input type="date" name="Start_Date" id="Start_Date" value="" required><br>
-        
-        <label for="Time">Time:</label>
-        <input type="time" name="Time" id="Time" value="" required><br>
+        <label for="Doc_Type">Document Type:</label>
+        <input type="text" name="Doc_Type" id="Doc_Type" value="" required><br>
 
-        <label for="Location">Location:</label>
-        <input type="text" name="Location" id="Location" value="" required><br>
-
-        <label for="End_Date">End Date:</label>
-        <input type="date" name="End_Date" id="End_Date" value="" required><br>
-
-        <label for="">Event Type:</label>
-        <input type="text" name="Event_Type" id="Event_Type" value="" required><br><br> -->
-
-
-        <input type="submit" value="Insert Events Form">
+        <input type="submit" value="Insert Documents Form">
     </form>
 
     <!-- Insertion php -->
@@ -119,26 +124,18 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
             if($formID == "insert"){
-                // // save the new inputs as variables
-                // $newUIN = $_POST['UIN'];
-                // $newProgNum = $_POST['Program_Num'];
-                // $newStartDate = $_POST['Start_Date'];
-                // $newTime = $_POST['Time'];
-                // $newLocation = $_POST['Location'];
-                // $newEndDate = $_POST['End_Date'];
-                // $newEventType = $_POST['Event_Type'];
+                // save the new inputs as variables
+                $newAppNum= $_POST['App_Num'];
+                $newLink = $_POST['Link'];
+                $newDocType = $_POST['Doc_Type'];
 
-                // $sqlInsert = 
-                //     "INSERT INTO event 
-                //         (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type)
-                //     VALUES 
-                //         ($newUIN, $newProgNum, '$newStartDate', '$newTime', '$newLocation', '$newEndDate', '$newEventType')";
+                $sqlInsert = "INSERT INTO documentation (App_Num, Link, Doc_Type) VALUES ($newAppNum, '$newLink', '$newDocType')";
                 
-                // if ($conn->query($sqlInsert) === TRUE) {
-                //     echo "Inserted event successfully!";
-                // } else {
-                //     echo "Error adding event: " . $conn->error;
-                // }
+                if ($conn->query($sqlInsert) === TRUE) {
+                    echo "Inserted document successfully!";
+                } else {
+                    echo "Error adding document: " . $conn->error;
+                }
             }
         }
     ?>
@@ -148,18 +145,19 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="delete">
 
-        <!-- <label for = "delete_event_ID">Select the event by EventID to delete:</label>
-        <select name = "delete_event_ID" id = "delete_event_ID">
+        <label for = "delete_Doc_Num">Select the document by document number to delete:</label>
+        <select name = "delete_Doc_Num" id = "delete_Doc_Num">
+            <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM event";
+                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                        echo "<option value='" . $row["Doc_Num"] . "'>" . $row["Doc_Num"] . "</option>";
                     }
                 } 
             ?>
-        </select> -->
+        </select>
 
         <input type="submit" value="Insert delete Form">
     </form>
@@ -168,19 +166,24 @@
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
-            if($formID == "delete"){
-                // // Get the selected role from the form
-                // $selectedID = $_POST['delete_event_ID'];
-                // if(eventExists($selectedID, $conn)){
-                //     $sql = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
-                //     if ($conn->query($sql) === TRUE) {
-                //         echo "Event with Event ID $selectedID deleted successfully!";
-                //     } else {
-                //         echo "Error deleting event: " . $conn->error;
-                //     }
-                // } else {
-                //     echo "Event doesn't exist.";
-                // }
+            if($formID == "delete") {
+                // Get the selected doc num from the form
+                $selectedNum = $_POST['delete_Doc_Num'];
+                if($selectedNum == "none") {
+                    echo " ";
+                } else {
+
+                    if(docExists($selectedNum, $conn)){
+                        $sql = "DELETE FROM documentation WHERE Doc_Num = '$selectedNum'";
+                        if ($conn->query($sql) === TRUE) {
+                            echo "Document with Document Number $selectedNum deleted successfully!";
+                        } else {
+                            echo "Error deleting document: " . $conn->error;
+                        }
+                    } else {
+                        echo "Document doesn't exist.";
+                    }
+                }
             }
         }
     ?>
@@ -191,8 +194,8 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="update">
 
-        <!-- <label for = "update_event_ID">Select the event ID for the event you wish to update:</label>
-        <select name = "update_event_ID" id = "update_event_ID">
+        <label for = "update_Doc_Num">Select the event ID for the event you wish to update:</label>
+        <select name = "update_Doc_Num" id = "update_Doc_Num">
             <?php
                 $query = "SELECT * FROM event";
                 $result = $conn->query($query);
@@ -216,7 +219,7 @@
         </select><br>
 
         <label for="newValue">New Value:</label>
-        <input type="text" name="newValue" id="newValue" value="" required><br><br> -->
+        <input type="text" name="newValue" id="newValue" value="" required><br><br>
 
         <input type="submit" value="Insert update Form">
     </form>
@@ -227,7 +230,7 @@
             $formID = $_POST['form_id'];
             if($formID == "update"){
                 // // Get the selected role from the form FIXME
-                // $updateID = $_POST['update_event_ID'];
+                // $updateID = $_POST['update_Doc_Num'];
                 // $updateColumn = $_POST['columnToChange'];
                 // $newValue = $_POST['newValue'];
 

@@ -15,7 +15,7 @@
     }
 
     function eventExists($givenEvent, $conn) {
-        // Prepare and bind the statement with the given paramter
+        // Prepare and bind the statement with the given parameter
         $stmt = $conn->prepare("SELECT Event_ID FROM event WHERE Event_ID = ?");
         $stmt->bind_param("i", $givenEvent); // eventID integer
         
@@ -91,7 +91,7 @@
                         echo "<br>";
                     }
                 } else {
-                    echo "No Events found for the selected Event ID.";
+                    echo "No events found for the selected Event ID.";
                 }
             }
         }
@@ -163,6 +163,7 @@
 
         <label for = "delete_event_ID">Select the event by EventID to delete:</label>
         <select name = "delete_event_ID" id = "delete_event_ID">
+            <option value="none" selected disabled hidden>Select an Option</option>
             <?php
                 $query = "SELECT * FROM event";
                 $result = $conn->query($query);
@@ -206,6 +207,7 @@
 
         <label for = "update_event_ID">Select the event ID for the event you wish to update:</label>
         <select name = "update_event_ID" id = "update_event_ID">
+            <option value="none" selected disabled hidden>Select an ID</option>
             <?php
                 $query = "SELECT * FROM event";
                 $result = $conn->query($query);
@@ -219,6 +221,7 @@
         
         <label for="columnToChange">Event Attribute to Change:</label>
         <select name="columnToChange" id="columnToChange">
+            <option value="none" selected disabled hidden>Select an Attribute</option>
             <option value="UIN">UIN</option>
             <option value="Program_Num">Program Number</option>
             <option value="Start_Date">Start Date</option>
