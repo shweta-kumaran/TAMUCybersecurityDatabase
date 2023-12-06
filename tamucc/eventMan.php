@@ -4,15 +4,37 @@
 
     // $server_name = "localhost";
     // $user_name = "pma";
+    // $conn = mysqli_connect($server_name, $user_name);
     
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
+    } else {
+        echo "Connected successfully";
     }
-    // $connection = mysqli_connect($server_name, $user_name);
 
-    // echo "Connected successfully";
+    if ($_SESSION['role'] != 'admin' or !isset($_SESSION['role'])) //!isset($_SESSION['nID'])
+    {
+        header("Location: index.php");
+        die();
+    }
 
-    // "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+    function eventExists($givenEvent, $conn) {
+        // Prepare and bind the statement with the given paramter
+        $stmt = $conn->prepare("SELECT Event_ID FROM event WHERE Event_ID = ?");
+        $stmt->bind_param("i", $givenEvent); // eventID integer
+        
+        // Execute the statement and store the results
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        $stmt->close();
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,33 +45,173 @@
     <title>Event Management</title>
 </head>
 <body>
-    <form action="" method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
 
-        <button type="submit">Submit</button>
-    </form>
     <h1>Event Management</h1>
-    <!-- <form action="" method="post">
-        Name: <input type="text" name="name"><br>
-        E-mail: <input type="text" name="email"><br>
-        <input type="submit">
-    </form> -->
+    <a href="index.php">Home</a>
 
     <!-- Selection form -->
     <h2>Select and View Events</h2>
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="select">
 
-        <label for = "event_ID">Select all events or an event ID:</label>
-        <select name = "event_ID" id = "event_ID">
+        <label for = "select_event_ID">Select all events or an event ID:</label>
+        <select name = "select_event_ID" id = "select_event_ID">
             <option value = "all"> All events </option>
 
             <?php
-                $query = "SELECT * FROM event_info";
+                $query = "SELECT * FROM event";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                    }
+                } 
+            ?>
+        </select>
+        <input type="submit" value="Select Events Form">
+    </form>
+
+            
+
+    <!-- Selection php -->
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formID = $_POST['form_id'];
+            if($formID == "select"){
+                // Get the selected role from the form
+                $selectedID = $_POST['select_event_ID'];
+                // Query to fetch users based on the selected Event ID
+                if ( $selectedID == "all" ) {
+                    $sqlSelect = "SELECT * FROM event";
+                } else {
+                    $sqlSelect = "SELECT * FROM event WHERE Event_ID = '$selectedID'";
+                }
+                $result = $conn->query($sqlSelect);
+            
+                if ($result->num_rows > 0) {
+                    // Output data of each event
+                    while ($row = $result->fetch_assoc()) {
+                        echo "Event ID: " . $row["Event_ID"] . " - Program Number: " . $row["Program_Num"] . " - Event Type: " . $row["Event_Type"] . " - Start Date: " . $row["Start_Date"] . " - End Date: " . $row["End_Date"];
+                        echo "<br>";
+                    }
+                } else {
+                    echo "No Events found for the selected Event ID.";
+                }
+            }
+        }
+    ?>
+
+    <!-- Insertion form -->
+    <h2>Insert an Event</h2> <br>
+    <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="insert">
+
+        <label for="UIN">UIN:</label>
+        <input type="text" name="UIN" id="UIN" value="" required><br>
+    
+        <label for="Program_Num">Program Number:</label>
+        <input type="int" name="Program_Num" id="Program_Num" value="" required><br>
+
+        <label for="Start_Date">Start Date:</label>
+        <input type="date" name="Start_Date" id="Start_Date" value="" required><br>
+        
+        <label for="Time">Time:</label>
+        <input type="time" name="Time" id="Time" value="" required><br>
+
+        <label for="Location">Location:</label>
+        <input type="text" name="Location" id="Location" value="" required><br>
+
+        <label for="End_Date">End Date:</label>
+        <input type="date" name="End_Date" id="End_Date" value="" required><br>
+
+        <label for="">Event Type:</label>
+        <input type="text" name="Event_Type" id="Event_Type" value="" required><br><br>
+
+
+        <input type="submit" value="Insert Events Form">
+    </form>
+
+    <!-- Insertion php -->
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formID = $_POST['form_id'];
+            if($formID == "insert"){
+                // save the new inputs as variables
+                $newUIN = $_POST['UIN'];
+                $newProgNum = $_POST['Program_Num'];
+                $newStartDate = $_POST['Start_Date'];
+                $newTime = $_POST['Time'];
+                $newLocation = $_POST['Location'];
+                $newEndDate = $_POST['End_Date'];
+                $newEventType = $_POST['Event_Type'];
+
+                $sqlInsert = 
+                    "INSERT INTO event 
+                        (UIN, Program_Num, Start_Date, Time, Location, End_Date, Event_Type)
+                    VALUES 
+                        ($newUIN, $newProgNum, '$newStartDate', '$newTime', '$newLocation', '$newEndDate', '$newEventType')";
+                
+                if ($conn->query($sqlInsert) === TRUE) {
+                    echo "Inserted event successfully!";
+                } else {
+                    echo "Error adding event: " . $conn->error;
+                }
+            }
+        }
+    ?>
+
+    <!-- Deletion form -->
+    <h2>Delete an Event</h2> <br>
+    <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="delete">
+
+        <label for = "delete_event_ID">Select the event by EventID to delete:</label>
+        <select name = "delete_event_ID" id = "delete_event_ID">
+            <?php
+                $query = "SELECT * FROM event";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
+                    }
+                } 
+            ?>
+        </select>
+
+        <input type="submit" value="Insert delete Form">
+    </form>
+
+    <!-- Deletion php -->
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formID = $_POST['form_id'];
+            if($formID == "delete"){
+                // Get the selected role from the form
+                $selectedID = $_POST['delete_event_ID'];
+                if(eventExists($selectedID, $conn)){
+                    $sql = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
+                    if ($conn->query($sql) === TRUE) {
+                        echo "Event with Event ID $selectedID deleted successfully!";
+                    } else {
+                        echo "Error deleting event: " . $conn->error;
+                    }
+                } else {
+                    echo "Event doesn't exist.";
+                }
+            }
+        }
+    ?>
+
+
+    <!-- Update form -->
+    <h2>Update an Event</h2> <br>
+    <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="update">
+
+        <label for = "update_event_ID">Select the event ID for the event you wish to update:</label>
+        <select name = "update_event_ID" id = "update_event_ID">
+            <?php
+                $query = "SELECT * FROM event";
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -58,71 +220,48 @@
                 } 
             ?>
         </select><br>
-        <input type="submit" value="Select Events Form">
+        
+        <label for="columnToChange">Event Attribute to Change:</label>
+        <select name="columnToChange" id="columnToChange">
+            <option value="UIN">UIN</option>
+            <option value="Program_Num">Program Number</option>
+            <option value="Start_Date">Start Date</option>
+            <option value="Time">Time</option>
+            <option value="Location">Location</option>
+            <option value="End_Date">End Date</option>
+            <option value="Event_Type">Event Type</option>
+        </select><br>
+
+        <label for="newValue">New Value:</label>
+        <input type="text" name="newValue" id="newValue" value="" required><br><br>
+
+        <input type="submit" value="Insert update Form">
     </form>
 
-            
-
-    <!-- Selection php -->
+    <!-- Update php -->
     <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $formID = $_POST['form_id'];
-        if($formID == "event"){
-            // Get the selected role from the form
-            $selectedRole = $_POST['event_ID'];
-            // Query to fetch users based on the selected role
-            if($selectedRole == "all"){
-                $sql = "SELECT * FROM users";
-            }else if($selectedRole == "own"){
-                $ownUIN = $_SESSION['UIN'];
-                $sql = "SELECT * FROM users WHERE UIN = $ownUIN";
-            }else{
-                $sql = "SELECT * FROM users WHERE User_Type = '$selectedRole'";
-            }
-            $result = $conn->query($sql);
-        
-            if ($result->num_rows > 0) {
-                // Output data of each user
-                while ($row = $result->fetch_assoc()) {
-                    echo "User ID: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
-                    if($row["User_Type"] == "student"){
-                        $studentUIN = $row["UIN"];
-                        $studentSql = "SELECT * FROM collegestudents WHERE UIN=$studentUIN";
-                        $studentResult = $conn->query($studentSql);
-                        $stuRow = $studentResult->fetch_assoc();
-                        echo " - Gender: " . $stuRow['Gender'] . " - GPA: " . $stuRow['GPA'] . 
-                        " - Major: " . $stuRow['Major'] . " - Expected Graduation: " . $stuRow['Expected_Graduation'] . 
-                        " - School: " . $stuRow['School'] . " - Current Classification: " . $stuRow['Current_Classification'] . 
-                        " - Phone: " . $stuRow['Phone'] . " - Student Type: " . $stuRow['Student_Type'];
-                    }
-                    echo "<br>";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formID = $_POST['form_id'];
+            if($formID == "update"){
+                // Get the selected role from the form FIXME
+                $updateID = $_POST['update_event_ID'];
+                $updateColumn = $_POST['columnToChange'];
+                $newValue = $_POST['newValue'];
+
+                if(eventExists($updateID, $conn)) {
+                    $sqlUpdate = "UPDATE event SET $updateColumn = '$newValue' WHERE Event_ID = $updateID";
+                } else {
+                    echo "Event with that ID not found.";
                 }
-            } else {
-                echo "No users found for the selected role.";
+
+                if ($conn->query($sqlUpdate) === TRUE) {
+                    echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateID!";
+                } else {
+                    echo "Error updating $updateColumn: " . $conn->error;
+                }   
             }
         }
-        
-
-        
-    }
     ?>
-
-    <!-- Insertion form -->
-    <h2>Insert an Event</h2> <br>
-
-    <!-- Insertion php -->
-
-
-    <!-- Deletion form -->
-    <h2>Delete an Event</h2> <br>
-
-    <!-- Deletion php -->
-
-
-    <!-- Update form -->
-    <h2>Update an Event</h2> <br>
-
-    <!-- Update php -->
     
 
 </body>
