@@ -1,6 +1,7 @@
 <?php
     include_once 'includes/dbh.inc.php';
 
+
     session_start();
 
     $server_name = "localhost";
@@ -17,6 +18,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
     
+        
         // Hash the password (make sure to use a secure hashing algorithm)
     
         // Perform SQL query
@@ -66,12 +68,18 @@
     </form>
 
     <a href="userAuth.php">User Authentication</a> <br>
+    <a href="ProgramProgressTracking/addClass.html">Add New Class</a>
+    <a href="ProgramProgressTracking/addInternship.html">Add New Internship</a>
+    <a href="ProgramProgressTracking/addCertification.html">Add New Certification</a>
     <a href="studentDocuments.php">Student Documents</a> <br>
     <?php
         if($_SESSION['role'] == 'admin'){
                 echo "<a href='eventMan.php'>Event Management</a> <br>";
         }    
     ?>
+    
+
+
     
 </body>
 </html>
