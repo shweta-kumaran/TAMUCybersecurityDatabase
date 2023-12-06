@@ -83,7 +83,7 @@
                 $selectedID = $_POST['select_doc_num'];
                 // Query to fetch users based on the selected Event ID
                 if ( $selectedID == "all" ) {
-                    $sqlSelect = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
+                    $sqlSelect = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
                 } else {
                     $sqlSelect = "SELECT * FROM documentation WHERE Doc_Num = '$selectedID'";
                 }
@@ -149,7 +149,7 @@
         <select name = "delete_Doc_Num" id = "delete_Doc_Num">
             <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
+                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -191,6 +191,7 @@
 
     <!-- Update form -->
     <h2>Replace or Edit a Document Link</h2> <br>
+    <!-- use form to get the attribute and document to update -->
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="update">
 
@@ -198,7 +199,7 @@
         <select name = "update_Doc_Num" id = "update_Doc_Num">
             <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN')";
+                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -215,9 +216,39 @@
             <option value="Link">Link</option>
             <option value="Doc_Type">Document Type</option>
         </select><br>
-
+        <input type="submit" value="Submit to Input New Value">
+    </form>
+    
+    
+    <form method = "post" action = "">
+        <input type="hidden" name="form_id" value="updateNewValue">
         <label for="newValue">New Value:</label>
-        <input type="text" name="newValue" id="newValue" value="" required><br><br>
+        
+        <!-- pre-populate the text input with current value -->
+        <?php
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $formID = $_POST['form_id'];
+                if($formID == "update"){
+                    // Get the num and column  the form
+                    $updateNum = $_POST['update_Doc_Num'];
+                    $updateColumn = $_POST['columnToChange'];
+                    
+                    $_SESSION['doc_update_num'] = $updateNum; 
+                    $_SESSION['doc_update_col'] = $updateColumn; 
+                    
+                    // prepare the query to get info from database to pre-populate the text box
+                    $query = "SELECT * FROM `documentation` WHERE Doc_Num = $updateNum";
+                    $result = $conn->query($query);
+
+                    if($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        echo "<input type='text' name='newValue' id='newValue' value='" . $row[$updateColumn] ."' required> <br><br>";
+                    } else {
+                        echo "<input type='text' name='newValue' id='newValue' value='' required> <br><br>";
+                    }    
+                }
+            }
+        ?>
 
         <input type="submit" value="Update Documents Form">
     </form>
@@ -226,23 +257,23 @@
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
-            if($formID == "update"){
-                // Get the num, column and value from the form
-                $updateNum = $_POST['update_Doc_Num'];
-                $updateColumn = $_POST['columnToChange'];
+            if($formID == "updateNewValue"){
+                // Get the new value from the form
                 $newValue = $_POST['newValue'];
+                
+                $updateNum = $_SESSION['doc_update_num'];
+                $updateColumn = $_SESSION['doc_update_col'];
 
                 if(docExists($updateNum, $conn)) {
                     $sqlUpdate = "UPDATE documentation SET $updateColumn = '$newValue' WHERE Doc_Num = $updateNum";
+                    if ($conn->query($sqlUpdate) === TRUE) {
+                        echo "$updateColumn updated successfully to $newValue for the document with the Document Number $updateNum";
+                    } else {
+                        echo "Error updating $updateColumn: " . $conn->error;
+                    }   
                 } else {
-                    echo "Event with that ID not found.";
+                    echo "Document with that Document Number not found.";
                 }
-
-                if ($conn->query($sqlUpdate) === TRUE) {
-                    echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateNum";
-                } else {
-                    echo "Error updating $updateColumn: " . $conn->error;
-                }   
             }
         }
     ?>

@@ -249,15 +249,15 @@
 
                 if(eventExists($updateID, $conn)) {
                     $sqlUpdate = "UPDATE event SET $updateColumn = '$newValue' WHERE Event_ID = $updateID";
+                    if ($conn->query($sqlUpdate) === TRUE) {
+                        echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateID!";
+                    } else {
+                        echo "Error updating $updateColumn: " . $conn->error;
+                    }   
                 } else {
                     echo "Event with that ID not found.";
                 }
 
-                if ($conn->query($sqlUpdate) === TRUE) {
-                    echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateID!";
-                } else {
-                    echo "Error updating $updateColumn: " . $conn->error;
-                }   
             }
         }
     ?>
