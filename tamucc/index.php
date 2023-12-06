@@ -1,6 +1,7 @@
 <?php
     include_once 'includes/dbh.inc.php';
 
+
     session_start();
 
     $server_name = "localhost";
@@ -68,7 +69,9 @@
 
     <a href="userAuth.php">User Authentication</a> <br>
     <a href="eventMan.php">Event Management</a>
-    <a href="addClass.html">Add New Class</a>
+    <a href="ProgramProgressTracking/addClass.html">Add New Class</a>
+    <a href="ProgramProgressTracking/addInternship.html">Add New Internship</a>
+    <a href="ProgramProgressTracking/addCertification.html">Add New Certification</a>
 
     
 
