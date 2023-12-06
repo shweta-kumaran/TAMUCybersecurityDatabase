@@ -65,8 +65,8 @@
         <button type="submit">Submit</button>
     </form>
 
-    <a href="userAuth.php">User Authentication</a>
-    <a href="eventMan.php">Event Management (ADMIN)</a>
+    <a href="userAuth.php">User Authentication</a> <br>
+    <a href="eventMan.php">Event Management</a>
 
 
     
