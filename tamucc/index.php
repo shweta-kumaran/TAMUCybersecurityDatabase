@@ -17,6 +17,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
     
+        
         // Hash the password (make sure to use a secure hashing algorithm)
     
         // Perform SQL query
