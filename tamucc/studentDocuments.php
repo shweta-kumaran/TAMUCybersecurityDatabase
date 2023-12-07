@@ -43,9 +43,7 @@
 <body>
 
     <h1>Document Management</h1>
-    <?php
-        echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";
-    ?>
+    <?php echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";?>
     <a href="index.php">Home</a>
 
     <!-- Selection form -->

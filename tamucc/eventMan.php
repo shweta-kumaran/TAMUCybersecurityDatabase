@@ -31,6 +31,24 @@
         $stmt->close();
     }
 
+    function eventStudentExists($givenEventID, $givenUIN, $conn) {
+        // Prepare and bind the statement with the given parameter
+        $stmt = $conn->prepare("SELECT Event_ID FROM event_tracking WHERE (Event_ID = ? and UIN = ?)");
+        $stmt->bind_param("ii", $givenEventID, $givenUIN); // eventID and UIN integer
+        
+        // Execute the statement and store the results
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        $stmt->close();
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,10 +61,11 @@
 <body>
 
     <h1>Event Management</h1>
+    <?php echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";?>
     <a href="index.php">Home</a>
 
     <!-- Selection form -->
-    <h2>Select and View Events</h2>
+    <h2>Select and View Events and their Attendance</h2>
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="select">
 
@@ -87,11 +106,31 @@
                 if ($result->num_rows > 0) {
                     // Output data of each event
                     while ($row = $result->fetch_assoc()) {
-                        echo "Event ID: " . $row["Event_ID"] . " - Program Number: " . $row["Program_Num"] . " - Event Type: " . $row["Event_Type"] . " - Start Date: " . $row["Start_Date"] . " - End Date: " . $row["End_Date"];
+                        echo "Event ID: " . $row["Event_ID"] . " - Program Number: " . $row["Program_Num"]  . " - Admin UIN: " . $row["UIN"] . " - Event Type: " . $row["Event_Type"] . " - Start Date: " . $row["Start_Date"] . " - End Date: " . $row["End_Date"];
                         echo "<br>";
                     }
                 } else {
                     echo "No events found for the selected Event ID.";
+                }
+
+                echo "<br> Attendance: <br>";
+
+                if ( $selectedID == "all" ) {
+                    $sqlSelect = "SELECT * FROM event_attendance ORDER BY Event_ID";
+                } else {
+                    $sqlSelect = "SELECT * FROM event_attendance WHERE Event_ID = '$selectedID' ORDER BY Event_ID";
+                }
+                    
+                $result = $conn->query($sqlSelect);
+            
+                if ($result->num_rows > 0) {
+                    // Output data of each event
+                    while ($row = $result->fetch_assoc()) {
+                        echo "Event ID: " . $row["Event_ID"] . " - Name : " . $row["First_Name"] . " " . $row["Last_Name"] . " - UIN: " . $row["UIN"];
+                        echo "<br>";
+                    }
+                } else {
+                    echo "No attendance found for the selected Event ID.";
                 }
             }
         }
@@ -262,14 +301,14 @@
         }
     ?>
 
-    <!-- Event Attendance form -->
-    <h3>View and edit student attendance for events </h3>
+    <!-- Editing Event Attendance form -->
+    <h2>Add/Remove student events attendance  </h2>
     <form method = "post" action = "">
-        <input type="hidden" name="form_id" value="select_attendance">
+        <input type="hidden" name="form_id" value="edit_attendance">
 
-        <label for = "select_event_ID">Select an event ID to view attendance:</label>
+        <label for = "select_event_ID">Select an event ID to edit attendance:</label>
         <select name = "select_event_ID" id = "select_event_ID">
-        <option value="none" selected disabled hidden>Select an ID</option>
+        <option value="none" selected disabled hidden>Select an Event ID</option>
 
             <?php
                 $query = "SELECT * FROM event";
@@ -280,60 +319,70 @@
                     }
                 } 
             ?>
+        </select><br>
+
+        <label for = "select_UIN">Select a student by UIN to edit:</label>
+        <select name = "select_UIN" id = "select_UIN">
+        <option value="none" selected disabled hidden>Select a Student UIN</option>
+
+            <?php
+                $query = "SELECT * FROM collegestudents";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["UIN"] . "'>" . $row["UIN"] . "</option>";
+                    }
+                } 
+            ?>
+        </select> <br>
+
+        <label for = "add_remove">Add or remove the student?:</label>
+        <select name = "add_remove" id = "add_remove">
+            <option value = "none" selected disabled hidden>Select Add or Remove</option>
+            <option value = "add">Add</option>
+            <option value = "remove">Remove</option>
         </select>
-        <input type="submit" value="Select Events Form">
+        <br><br>
+        <input type="submit" value="Add Student to Event">
     </form>
 
-            
-
-    <!-- Event Attendance php -->
+    <!-- Editing Event Attendance php -->
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formID = $_POST['form_id'];
-            if($formID == "select_attendance"){
-                // Get the selected role from the form
+            if($formID == "edit_attendance"){
+                // Get the selected ID, UIN, and user choice from the form
+                $add_remove = $_POST['add_remove'];
                 $selectedID = $_POST['select_event_ID'];
-                // Query to fetch users based on the selected Event ID
+                $selectedUIN = $_POST['select_UIN'];
 
-                $sqlSelect = "SELECT * FROM event_attendance WHERE Event_ID = '$selectedID'";
-                
-                $result = $conn->query($sqlSelect);
-            
-                if ($result->num_rows > 0) {
-                    // Output data of each event
-                    while ($row = $result->fetch_assoc()) {
-                        echo "Event ID: " . $row["Event_ID"] . " - Name : " . $row["First_Name"] . " " . $row["Last_Name"] . " - UIN: " . $row["UIN"];
-                        echo "<br>";
+                if($add_remove == "add") {
+                    if(!eventStudentExists($selectedID, $selectedUIN, $conn)){
+                        $sqlInsert = "INSERT INTO event_tracking (Event_ID, UIN) VALUES ($selectedID, $selectedUIN)";
+                        
+                        if ($conn->query($sqlInsert) === TRUE) {
+                            echo "Student with UIN $selectedUIN added to Event with Event ID $selectedID successfully!";
+                        } else {
+                            echo "Error adding event attendance: " . $conn->error;
+                        }
+                    } else {
+                        echo "Student already has attendance at given event.";
                     }
-                } else {
-                    echo "No attendance found for the selected Event ID.";
+
+                } else if ($add_remove == "remove") {
+                    if(eventStudentExists($selectedID, $selectedUIN, $conn)){
+                        $sqlDelete = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
+                        if ($conn->query($sqlDelete) === TRUE) {
+                            echo "Student with UIN $selectedUIN removed from Event with Event ID $selectedID successfully!";
+                        } else {
+                            echo "Error removing event attendance: " . $conn->error;
+                        }
+                    } else {
+                        echo "Student attendance at given event doesn't exist.";
+                    }
                 }
             }
         }
     ?>
-
-    <!-- <form method = "post" action = "">
-        <input type="hidden" name="form_id" value="select_attendance">
-
-        <label for = "select_event_ID">Select an event ID and UIN to edit student attendance:</label>
-        <select name = "select_event_ID" id = "select_event_ID">
-        <option value="none" selected disabled hidden>Select an ID</option>
-
-            <?php
-                $query = "SELECT * FROM event";
-                $result = $conn->query($query);
-                if($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["Event_ID"] . "'>" . $row["Event_ID"] . "</option>";
-                    }
-                } 
-            ?>
-        </select>
-        <input type="submit" value="Select Events Form">
-    </form> -->
-    
-
-    <!-- MISSING PHP FOR LAST FORM!!! FIXME -->
-
 </body>
 </html>
