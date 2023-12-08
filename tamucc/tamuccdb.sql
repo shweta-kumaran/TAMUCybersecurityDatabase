@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 10:33 PM
+-- Generation Time: Dec 08, 2023 at 11:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -153,6 +153,24 @@ CREATE TABLE `collegestudents` (
 INSERT INTO `collegestudents` (`UIN`, `Gender`, `HispanicLatino`, `Race`, `USCitizen`, `First_Generation`, `DoB`, `GPA`, `Major`, `Minor1`, `Minor2`, `Expected_Graduation`, `School`, `Current_Classification`, `Phone`, `Student_Type`) VALUES
 (2, 'Male', 0x30, 'Caucasian', 0x31, 0x30, '1990-01-15', 3.5, 'Computer Science', 'Mathematics', 'Psychology', 2023, 'School of Science and Engineering', 'Senior', 1234567890, 'Undergraduate'),
 (5, 'female', 0x01, 'a', 0x01, 0x0a, '2023-12-05', 3, 'a', 'a', 'a', 2023, 'a', 'a', 979, 'student');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `deactivated_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `deactivated_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
 
 -- --------------------------------------------------------
 
@@ -380,6 +398,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `deactivated_users`
+--
+DROP TABLE IF EXISTS `deactivated_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deactivated_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'deactivated'WITH CASCADED CHECK OPTION  ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `documents_with_users`
 --
 DROP TABLE IF EXISTS `documents_with_users`;
@@ -476,7 +503,8 @@ ALTER TABLE `track`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`UIN`);
+  ADD PRIMARY KEY (`UIN`),
+  ADD KEY `idx_UIN` (`UIN`);
 
 --
 -- AUTO_INCREMENT for dumped tables
