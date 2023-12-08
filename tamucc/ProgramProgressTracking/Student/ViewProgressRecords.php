@@ -26,9 +26,13 @@ $classes = fetchAll($conn, "classes");
 <html>
 <head>
     <title>Program Progress Tracking</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-    <h1>Program Progress Tracking</h1>
+    <div class="header">
+        <h1>Program Progress Tracking</h1>
+        <a href="index.php">Home</a>
+    </div>
 
     <h2>Internships</h2>
     <ul>

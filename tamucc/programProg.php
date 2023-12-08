@@ -48,8 +48,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
+    <div class="header">
+        <h1>Programs</h1>
+        <a href="index.php">Home</a>
+    </div>
     <form action="" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>

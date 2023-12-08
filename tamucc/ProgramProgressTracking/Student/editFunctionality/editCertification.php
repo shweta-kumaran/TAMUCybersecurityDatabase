@@ -45,10 +45,14 @@ $result = fetchCertifications($conn);
 <html>
 <head>
     <title>Edit Certification</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
+    <div class="header">
+        <h2>Select a Certification to Edit</h2>
+        <a href="index.php">Home</a>
+    </div>
 
-<h2>Select a Certification to Edit</h2>
 
 <form action="" method="post">
     <label for="cert_id">Select Certification:</label>

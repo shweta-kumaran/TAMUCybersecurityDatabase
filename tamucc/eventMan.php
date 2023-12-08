@@ -65,7 +65,7 @@
         <a href="index.php">Home</a>
     </div>
     
-    <?php echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";?>
+    <?php //echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";?>
     <!-- Selection form -->
     <h2>Select and View Events and their Attendance</h2>
     <form method = "post" action = "">

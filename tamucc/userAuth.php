@@ -61,8 +61,11 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="index.php">Home</a> <br>
-    <h1>User Management and Authentication</h1>
+    <div class="header">
+        <h1>User Management and Authentication</h1>
+        <a href="index.php">Home</a>
+    </div>
+    
     <h2>Insertion</h2>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
@@ -273,14 +276,14 @@
                     )";
 
                     if ($conn->query($studentSql) === TRUE) {
-                        echo "Inserted $newUsertype $newFirstName $newLastName with UIN $newUIN and GPA $gpa";
+                        echo "<p class='response'>Inserted $newUsertype $newFirstName $newLastName with UIN $newUIN and GPA $gpa</p>";
                     } else {
-                        echo "Error adding student user: " . $conn->error;
+                        echo "<p class='response'>Error adding student user: " . $conn->error . "</p>";
                     }
                 }
 
             }else{
-                echo "$newUIN already present in the database.";
+                echo "<p class='response'>$newUIN already present in the database.</p>";
             }
         }
     }
@@ -358,13 +361,13 @@
                     }
 
                     if ($conn->query($sql) === TRUE) {
-                        echo "$attributeToChange updated successfully to $newValue for $uinToChange";
+                        echo "<p class='response'>$attributeToChange updated successfully to $newValue for $uinToChange</p>";
                     } else {
-                        echo "Error updating $attributeToChange: " . $conn->error;
+                        echo "<p class='response'>Error updating $attributeToChange: " . $conn->error . "</p>";
                     }
 
                 }else{
-                    echo "User with that UIN not found.";
+                    echo "<p class='response'>User with that UIN not found.</p>";
                 }
             }
         }
@@ -412,6 +415,7 @@
         
             if ($result->num_rows > 0) {
                 // Output data of each user
+                echo "<p class = 'result'>";
                 while ($row = $result->fetch_assoc()) {
                     echo "UIN: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
                     if($row["User_Type"] == "student"){
@@ -426,8 +430,9 @@
                     }
                     echo "<br>";
                 }
+                echo "</p>";
             } else {
-                echo "No users found for the selected role.";
+                echo "<p class = 'response'>No users found for the selected role.</p>";
             }
         }
     }
@@ -467,9 +472,9 @@
             if(collegestudentExists($uinToChange, $conn)){
                 $sql = "DELETE FROM `collegestudents` WHERE UIN = '$uinToChange'";
                 if ($conn->query($sql) === TRUE) {
-                    echo "$uinToChange deleted.";
+                    echo "<p class='response'>$uinToChange deleted.</p>";
                 } else {
-                    echo "Error deleting student.";
+                    echo "<p class='response'>Error deleting student.</p>";
                 }
             }
 
@@ -478,10 +483,10 @@
                 if ($conn->query($sql) === TRUE) {
                     echo "$uinToChange deleted.";
                 } else {
-                    echo "Error deleting student.";
+                    echo "<p class='response'>Error deleting student.</p>";
                 }
             }else{
-                echo "User doesn't exist.";
+                echo "<p class='response'>User doesn't exist.</p>";
             }
         }
 
@@ -490,9 +495,9 @@
             if(userExists($uinToChange, $conn)){
                 $sql = "UPDATE users SET User_Type = 'deactivated' WHERE UIN = $uinToChange";
                 if ($conn->query($sql) === TRUE) {
-                    echo "$uinToChange deactivated.";
+                    echo "<p class='response'>$uinToChange deactivated.</p>";
                 } else {
-                    echo "Error deleting student.";
+                    echo "<p class='response'>Error deleting student.</p>";
                 }
             }
         }

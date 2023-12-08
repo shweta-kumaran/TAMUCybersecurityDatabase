@@ -45,10 +45,13 @@ $result = fetchInternships($conn);
 <html>
 <head>
     <title>Edit Internship</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-
-<h2>Select an Internship to Edit</h2>
+    <div class="header">
+        <h2>Select an Internship to Edit</h2>
+        <a href="index.php">Home</a>
+    </div>
 
 <form action="" method="post">
     <label for="intern_id">Select Internship:</label>

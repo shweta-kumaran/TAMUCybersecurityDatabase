@@ -42,7 +42,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Submit an Application</h1>
+    <div class="header">
+        <h1>Submit an Application</h1>
+        <a href="index.php">Home</a>
+    </div>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
         
