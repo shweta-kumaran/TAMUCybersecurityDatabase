@@ -6,28 +6,22 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    if (!isset($_SESSION['role']))
-    {
-        header("Location: index.php");
-        die();
-    }
-
-    function docExists($givenDoc, $conn) {
-        // Prepare and bind the statement with the given parameter
-        $stmt = $conn->prepare("SELECT Doc_Num FROM documentation WHERE Doc_Num = ?");
-        $stmt->bind_param("i", $givenDoc); // Doc_Num integer
-        
-        // Execute the statement and store the results
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
-
-        $stmt->close();
-    }
+    function userExists($uin, $conn) {
+      // Prepare the statement
+      $stmt = $conn->prepare("SELECT UIN FROM users WHERE UIN = ?");
+      // Bind the parameter
+      $stmt->bind_param("i", $uin); // Assuming UIN is an integer, use "s" if it's a string     
+      // Execute the statement
+      $stmt->execute();
+      $stmt->store_result();
+      if ($stmt->num_rows > 0) {
+          return true;
+      } else {
+          return false;
+      }
+      // Close the statement
+      $stmt->close();
+  }
 
 ?>
 <!DOCTYPE html>
@@ -181,7 +175,7 @@
                VALUES ($newUIN, '$newFirstName', NULL, '$newLastName', '$newUsername', '$newPassword', '$newUsertype', '$newEmail', '$newDiscord')";
 
                   if ($conn->query($baseSql) === TRUE) {
-                     echo "Inserted $newUsertype $newFirstName $newLastName with the username $newUsername";
+                     echo "Inserted $newUsertype $newFirstName $newLastName with the username $newUsername <br>";
                   } else {
                      echo "Error adding admin user: " . $conn->error;
                   }
@@ -248,7 +242,7 @@
                      )";
 
                      if ($conn->query($studentSql) === TRUE) {
-                           echo "Inserted $newUsertype $newFirstName $newLastName with UIN $newUIN and GPA $gpa";
+                           echo "Inserted $newUsertype $newFirstName $newLastName with UIN $newUIN and GPA $gpa <br>";
                      } else {
                            echo "Error adding student user: " . $conn->error;
                      }
