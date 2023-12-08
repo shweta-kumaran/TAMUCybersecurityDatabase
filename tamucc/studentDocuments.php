@@ -36,14 +36,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/styles.css">
     <title>Document Management</title>
 </head>
 <body>
 
-    <h1>Document Management</h1>
-    <?php echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";?>
-    <a href="index.php">Home</a>
-
+    <div class="header">
+        <h1>Document Management</h1>
+        <a href="index.php">Home</a>
+    </div>
+    
+    <?php echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3>";?>
     <!-- Selection form -->
     <h2>Select and View Document Links</h2>
     <form method = "post" action = "">
@@ -64,7 +67,7 @@
                 } 
             ?>
         </select>
-        <input type="submit" value="Select Documents Form">
+        <input type="submit" value="Select Document(s)">
     </form>
 
             
@@ -89,10 +92,12 @@
             
                 if ($result->num_rows > 0) {
                     // Output data of each event
+                    echo "<p class = 'result'>";
                     while ($row = $result->fetch_assoc()) {
                         echo "Document Number: " . $row["Doc_Num"] . " - Application Number: " . $row["App_Num"] . " - Document Type: " . $row["Doc_Type"] . " - Document Link: " . $row["Link"];
                         echo "<br>";
                     }
+                    echo "</p>";
                 } else {
                     echo "No documents found for the selected document number.";
                 }
@@ -128,7 +133,7 @@
         <label for="Doc_Type">Document Type:</label>
         <input type="text" name="Doc_Type" id="Doc_Type" value="" required><br><br>
 
-        <input type="submit" value="Insert Document(s)">
+        <input type="submit" value="Insert Document">
     </form>
 
     <!-- Insertion php -->
@@ -144,9 +149,9 @@
                 $sqlInsert = "INSERT INTO documentation (App_Num, Link, Doc_Type) VALUES ($newAppNum, '$newLink', '$newDocType')";
                 
                 if ($conn->query($sqlInsert) === TRUE) {
-                    echo "Inserted document successfully!";
+                    echo "<p class='response'>Inserted document successfully!</p>";
                 } else {
-                    echo "Error adding document: " . $conn->error;
+                    echo "<p class='response'>Error adding document: " . $conn->error."</p>";
                 }
             }
         }
@@ -157,9 +162,9 @@
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="delete">
 
-        <label for = "delete_Doc_Num">Select the document by document number to delete:</label>
+        <label for = "delete_Doc_Num">Select the document to delete:</label>
         <select name = "delete_Doc_Num" id = "delete_Doc_Num">
-            <option value="none" selected disabled hidden>Select an Option</option>
+            <option value="none" selected disabled hidden>Select a Document</option>
             <?php
                 // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
                 $query = "SELECT * FROM documents_with_users WHERE UIN = '$currUIN' ORDER BY Doc_Num, App_Num";
@@ -190,12 +195,12 @@
                     if(docExists($selectedNum, $conn)){
                         $sql = "DELETE FROM documentation WHERE Doc_Num = '$selectedNum'";
                         if ($conn->query($sql) === TRUE) {
-                            echo "Document with Document Number $selectedNum deleted successfully!";
+                            echo "<p class='response'>Document with Document Number $selectedNum deleted successfully!</p>";
                         } else {
-                            echo "Error deleting document: " . $conn->error;
+                            echo "<p class='response'>Error deleting document: " . $conn->error . "</p>";
                         }
                     } else {
-                        echo "Document doesn't exist.";
+                        echo "<p class='response'>Document doesn't exist.</p>";
                     }
                 }
             }
@@ -204,14 +209,15 @@
 
 
     <!-- Update form -->
-    <h2>Replace or Edit a Document Link</h2> <br>
+    <h2>Replace or Edit a Document Link</h2> 
+    <p> Select the document and attribute you wish to edit and click submit to show the new value text box.</p>
     <!-- use form to get the attribute and document to update -->
     <form method = "post" action = "">
         <input type="hidden" name="form_id" value="update">
 
-        <label for = "update_Doc_Num">Select the Document Number for the document you wish to update:</label>
+        <label for = "update_Doc_Num">Select the Document to Update:</label>
         <select name = "update_Doc_Num" id = "update_Doc_Num">
-            <option value="none" selected disabled hidden>Select an Option</option>
+            <option value="none" selected disabled hidden>Select a Document</option>
             <?php
                 // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
                 $query = "SELECT * FROM documents_with_users WHERE UIN = '$currUIN' ORDER BY Doc_Num, App_Num";
@@ -283,12 +289,12 @@
                 if(docExists($updateNum, $conn)) {
                     $sqlUpdate = "UPDATE documentation SET $updateColumn = '$newValue' WHERE Doc_Num = $updateNum";
                     if ($conn->query($sqlUpdate) === TRUE) {
-                        echo "$updateColumn updated successfully to $newValue for the document with the Document Number $updateNum";
+                        echo "<p class='response'>$updateColumn updated successfully to $newValue for the document with the Document Number $updateNum</p>";
                     } else {
-                        echo "Error updating $updateColumn: " . $conn->error;
+                        echo "<p class='response'>Error updating $updateColumn: " . $conn->error . "</p>";
                     }   
                 } else {
-                    echo "Document with that Document Number not found.";
+                    echo "<p class='response'>Document with that Document Number not found.</p>";
                 }
             }
         }

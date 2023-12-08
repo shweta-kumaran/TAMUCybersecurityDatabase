@@ -54,14 +54,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/styles.css">
+
     <title>Event Management</title>
 </head>
 <body>
 
-    <h1>Event Management</h1>
-    <?php echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";?>
-    <a href="index.php">Home</a>
-
+    <div class="header">
+        <h1>Event Management</h1>
+        <a href="index.php">Home</a>
+    </div>
+    
+    <?php echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";?>
     <!-- Selection form -->
     <h2>Select and View Events and their Attendance</h2>
     <form method = "post" action = "">
@@ -69,7 +73,7 @@
 
         <label for = "select_event_ID">Select all events or an event ID:</label>
         <select name = "select_event_ID" id = "select_event_ID">
-            <option value = "all"> All events </option>
+            <option value = "all"> All Events </option>
 
             <?php
                 $query = "SELECT * FROM event";
@@ -103,14 +107,16 @@
             
                 if ($result->num_rows > 0) {
                     // Output data of each event
+                    echo "<p class = 'result'>";
                     while ($row = $result->fetch_assoc()) {
                         echo "Event ID: " . $row["Event_ID"] . " - Program Number: " . $row["Program_Num"]  . " - Admin UIN: " . $row["UIN"] . " - Event Type: " . $row["Event_Type"] . " - Start Date: " . $row["Start_Date"] . " - End Date: " . $row["End_Date"];
                         echo "<br>";
                     }
+                    echo "</p>";
                 } else {
                     echo "No events found for the selected Event ID.";
                 }
-
+                
                 echo "<br> Attendance: <br>";
 
                 if ( $selectedID == "all" ) {
@@ -123,12 +129,14 @@
             
                 if ($result->num_rows > 0) {
                     // Output data of each event
+                    echo "<p class = 'result'>";
                     while ($row = $result->fetch_assoc()) {
                         echo "Event ID: " . $row["Event_ID"] . " - Name : " . $row["First_Name"] . " " . $row["Last_Name"] . " - UIN: " . $row["UIN"];
                         echo "<br>";
                     }
+                    echo "</p>";
                 } else {
-                    echo "No attendance found for the selected Event ID.";
+                    echo "<p class = 'result'>No attendance found for the selected Event ID.</p>";
                 }
             }
         }
@@ -141,6 +149,7 @@
 
         <label for="UIN">UIN:</label>
         <select name = "UIN" id = "UIN" required>
+            <option value="none" selected disabled hidden>Select a UIN</option>
             <?php
                 $query = "SELECT * FROM users WHERE User_Type = 'admin'";
                 $result = $conn->query($query);
@@ -155,6 +164,7 @@
     
         <label for="Program_Num">Program Number:</label>
         <select name = "Program_Num" id = "Program_Num" required>
+            <option value="none" selected disabled hidden>Select a Program Number</option>
             <?php
                 $query = "SELECT * FROM programs";
                 $result = $conn->query($query);
@@ -206,9 +216,9 @@
                         ($newUIN, $newProgNum, '$newStartDate', '$newTime', '$newLocation', '$newEndDate', '$newEventType')";
                 
                 if ($conn->query($sqlInsert) === TRUE) {
-                    echo "Inserted event successfully!";
+                    echo "<p class='response'>Inserted event successfully!</p>";
                 } else {
-                    echo "Error adding event: " . $conn->error;
+                    echo "<p class='response'>Error adding event: " . $conn->error . "</p>";
                 }
             }
         }
@@ -246,12 +256,12 @@
                 if(eventExists($selectedID, $conn)){
                     $sqlDelete = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
                     if ($conn->query($sqlDelete) === TRUE) {
-                        echo "Event with Event ID $selectedID deleted successfully!";
+                        echo "<p class='response'>Event with Event ID $selectedID deleted successfully!</p>";
                     } else {
-                        echo "Error deleting event: " . $conn->error;
+                        echo "<p class='response'>Error deleting event: " . $conn->error . "</p>";
                     }
                 } else {
-                    echo "Event doesn't exist.";
+                    echo "<p class='response'>Event doesn't exist.</p>";
                 }
             }
         }
@@ -308,12 +318,12 @@
                 if(eventExists($updateID, $conn)) {
                     $sqlUpdate = "UPDATE event SET $updateColumn = '$newValue' WHERE Event_ID = $updateID";
                     if ($conn->query($sqlUpdate) === TRUE) {
-                        echo "$updateColumn updated successfully to $newValue for the event with Event ID $updateID!";
+                        echo "<p class='response'>$updateColumn updated successfully to $newValue for the event with Event ID $updateID!</p>";
                     } else {
-                        echo "Error updating $updateColumn: " . $conn->error;
+                        echo "<p class='response'>Error updating $updateColumn: " . $conn->error . "</p>";
                     }   
                 } else {
-                    echo "Event with that ID not found.";
+                    echo "<p class='response'>Event with that ID not found.</p>";
                 }
 
             }
@@ -380,24 +390,24 @@
                         $sqlInsert = "INSERT INTO event_tracking (Event_ID, UIN) VALUES ($selectedID, $selectedUIN)";
                         
                         if ($conn->query($sqlInsert) === TRUE) {
-                            echo "Student with UIN $selectedUIN added to Event with Event ID $selectedID successfully!";
+                            echo "<p class='response'>Student with UIN $selectedUIN added to Event with Event ID $selectedID successfully!</p>";
                         } else {
-                            echo "Error adding event attendance: " . $conn->error;
+                            echo "<p class='response'>Error adding event attendance: " . $conn->error . "</p>";
                         }
                     } else {
-                        echo "Student already has attendance at given event.";
+                        echo "<p class='response'>Student already has attendance at given event.</p>";
                     }
 
                 } else if ($add_remove == "remove") {
                     if(eventStudentExists($selectedID, $selectedUIN, $conn)){
                         $sqlDelete = "DELETE FROM `event_tracking` WHERE UIN = '$selectedUIN'";
                         if ($conn->query($sqlDelete) === TRUE) {
-                            echo "Student with UIN $selectedUIN removed from Event with Event ID $selectedID successfully!";
+                            echo "<p class='response'>Student with UIN $selectedUIN removed from Event with Event ID $selectedID successfully!</p>";
                         } else {
-                            echo "Error removing event attendance: " . $conn->error;
+                            echo "<p class='response'>Error removing event attendance: " . $conn->error . "</p>";
                         }
                     } else {
-                        echo "Student attendance at given event doesn't exist.";
+                        echo "<p class='response'>Student attendance at given event doesn't exist.</p>";
                     }
                 }
             }
