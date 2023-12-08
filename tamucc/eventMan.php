@@ -4,8 +4,6 @@
     
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    } else {
-        echo "Connected successfully";
     }
 
     if ($_SESSION['role'] != 'admin' or !isset($_SESSION['role']))
@@ -83,7 +81,7 @@
                 } 
             ?>
         </select>
-        <input type="submit" value="Select Events Form">
+        <input type="submit" value="Select Event(s)">
     </form>
 
             
@@ -184,7 +182,7 @@
         <input type="text" name="Event_Type" id="Event_Type" value="" required><br><br>
 
 
-        <input type="submit" value="Insert Events Form">
+        <input type="submit" value="Insert Event">
     </form>
 
     <!-- Insertion php -->
@@ -235,7 +233,7 @@
             ?>
         </select>
 
-        <input type="submit" value="Delete Event Form">
+        <input type="submit" value="Delete Event">
     </form>
 
     <!-- Deletion php -->
@@ -294,7 +292,7 @@
         <label for="newValue">New Value:</label>
         <input type="text" name="newValue" id="newValue" value="" required><br><br>
 
-        <input type="submit" value="Update Event Form">
+        <input type="submit" value="Update Event">
     </form>
 
     <!-- Update php -->
@@ -364,7 +362,7 @@
             <option value = "remove">Remove</option>
         </select>
         <br><br>
-        <input type="submit" value="Add Student to Event">
+        <input type="submit" value="Edit Attendance">
     </form>
 
     <!-- Editing Event Attendance php -->

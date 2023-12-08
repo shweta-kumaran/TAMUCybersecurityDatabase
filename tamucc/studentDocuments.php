@@ -4,9 +4,7 @@
     
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    } else {
-        echo "Connected successfully";
-    }
+    } 
 
     if (!isset($_SESSION['role']))
     {
@@ -128,9 +126,9 @@
         <input type="text" name="Link" id="Link" value="" required><br>
 
         <label for="Doc_Type">Document Type:</label>
-        <input type="text" name="Doc_Type" id="Doc_Type" value="" required><br>
+        <input type="text" name="Doc_Type" id="Doc_Type" value="" required><br><br>
 
-        <input type="submit" value="Insert Documents Form">
+        <input type="submit" value="Insert Document(s)">
     </form>
 
     <!-- Insertion php -->
@@ -175,7 +173,7 @@
             ?>
         </select>
 
-        <input type="submit" value="Delete Documents Form">
+        <input type="submit" value="Delete Document">
     </form>
 
     <!-- Deletion php -->
@@ -268,7 +266,7 @@
             }
         ?>
 
-        <input type="submit" value="Update Documents Form">
+        <input type="submit" value="Update Document">
     </form>
 
     <!-- Update php -->
