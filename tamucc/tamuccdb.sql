@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2023 at 03:57 AM
+-- Generation Time: Dec 08, 2023 at 05:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,8 +120,8 @@ CREATE TABLE `collegestudents` (
   `DoB` date NOT NULL,
   `GPA` float NOT NULL,
   `Major` varchar(150) NOT NULL,
-  `Minor1` varchar(150) NOT NULL,
-  `Minor2` varchar(150) NOT NULL,
+  `Minor1` varchar(150) DEFAULT NULL,
+  `Minor2` varchar(150) DEFAULT NULL,
   `Expected_Graduation` int(15) NOT NULL,
   `School` varchar(150) NOT NULL,
   `Current_Classification` varchar(150) NOT NULL,
@@ -295,18 +295,6 @@ INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `track`
---
-
-CREATE TABLE `track` (
-  `Tracking_Num` int(11) NOT NULL,
-  `Program_Num` int(11) NOT NULL,
-  `Student_Num` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -398,55 +386,10 @@ ALTER TABLE `collegestudents`
   ADD PRIMARY KEY (`UIN`);
 
 --
--- Indexes for table `documentation`
---
-ALTER TABLE `documentation`
-  ADD PRIMARY KEY (`Doc_Num`),
-  ADD KEY `App_Num` (`App_Num`);
-
---
--- Indexes for table `event`
---
-ALTER TABLE `event`
-  ADD PRIMARY KEY (`Event_ID`),
-  ADD KEY `UIN` (`UIN`),
-  ADD KEY `Program_Num` (`Program_Num`);
-
---
--- Indexes for table `event_tracking`
---
-ALTER TABLE `event_tracking`
-  ADD PRIMARY KEY (`ET_NUM`),
-  ADD KEY `Event_ID` (`Event_ID`),
-  ADD KEY `UIN` (`UIN`);
-
---
--- Indexes for table `internship`
---
-ALTER TABLE `internship`
-  ADD PRIMARY KEY (`Intern_ID`);
-
---
--- Indexes for table `intern_app`
---
-ALTER TABLE `intern_app`
-  ADD PRIMARY KEY (`IA_Num`),
-  ADD KEY `UIN` (`UIN`),
-  ADD KEY `Intern_ID` (`Intern_ID`);
-
---
 -- Indexes for table `programs`
 --
 ALTER TABLE `programs`
   ADD PRIMARY KEY (`Program_Num`);
-
---
--- Indexes for table `track`
---
-ALTER TABLE `track`
-  ADD PRIMARY KEY (`Tracking_Num`),
-  ADD KEY `Program_Num` (`Program_Num`),
-  ADD KEY `Student_Num` (`Student_Num`);
 
 --
 -- Indexes for table `users`
@@ -533,13 +476,6 @@ ALTER TABLE `track`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `application`
---
-ALTER TABLE `application`
-  ADD CONSTRAINT `application_ibfk_1` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`),
-  ADD CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UIN`) REFERENCES `collegestudents` (`UIN`);
 
 --
 -- Constraints for table `cert_enrollment`
