@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 06, 2023 at 03:28 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Dec 08, 2023 at 05:15 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,13 +28,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `application` (
-  `App_NUM` int(11) NOT NULL,
+  `App_Num` int(11) NOT NULL,
   `Program_Num` int(11) NOT NULL,
   `UIN` int(11) NOT NULL,
   `Uncom_Cert` varchar(255) DEFAULT NULL,
   `Com_Cert` varchar(255) DEFAULT NULL,
   `Purpose_Statement` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `application`
+--
+
+INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
+(2, 1, 2, 'cert 1', 'cert 2', 'puropose statement'),
+(5, 3, 2, 'cert', 'cert', 'cert'),
+(7, 3, 5, 'cert', 'cert', 'cert\r\n'),
+(8, 3, 2, NULL, NULL, '');
 
 -- --------------------------------------------------------
 
@@ -110,8 +120,8 @@ CREATE TABLE `collegestudents` (
   `DoB` date NOT NULL,
   `GPA` float NOT NULL,
   `Major` varchar(150) NOT NULL,
-  `Minor1` varchar(150) NOT NULL,
-  `Minor2` varchar(150) NOT NULL,
+  `Minor1` varchar(150) DEFAULT NULL,
+  `Minor2` varchar(150) DEFAULT NULL,
   `Expected_Graduation` int(15) NOT NULL,
   `School` varchar(150) NOT NULL,
   `Current_Classification` varchar(150) NOT NULL,
@@ -124,7 +134,8 @@ CREATE TABLE `collegestudents` (
 --
 
 INSERT INTO `collegestudents` (`UIN`, `Gender`, `HispanicLatino`, `Race`, `USCitizen`, `First_Generation`, `DoB`, `GPA`, `Major`, `Minor1`, `Minor2`, `Expected_Graduation`, `School`, `Current_Classification`, `Phone`, `Student_Type`) VALUES
-(2, 'Male', 0x30, 'Caucasian', 0x31, 0x30, '1990-01-15', 3.5, 'Computer Science', 'Mathematics', 'Psychology', 2023, 'School of Science and Engineering', 'Senior', 1234567890, 'Undergraduate');
+(2, 'Male', 0x30, 'Caucasian', 0x31, 0x30, '1990-01-15', 3.5, 'Computer Science', 'Mathematics', 'Psychology', 2023, 'School of Science and Engineering', 'Senior', 1234567890, 'Undergraduate'),
+(5, 'female', 0x01, 'a', 0x01, 0x0a, '2023-12-05', 3, 'a', 'a', 'a', 2023, 'a', 'a', 979, 'student');
 
 -- --------------------------------------------------------
 
@@ -135,10 +146,37 @@ INSERT INTO `collegestudents` (`UIN`, `Gender`, `HispanicLatino`, `Race`, `USCit
 CREATE TABLE `documentation` (
   `Doc_Num` int(11) NOT NULL,
   `App_Num` int(11) NOT NULL,
-  `Student_Num` int(11) NOT NULL,
   `Link` varchar(255) NOT NULL,
   `Doc_Type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documentation`
+--
+
+INSERT INTO `documentation` (`Doc_Num`, `App_Num`, `Link`, `Doc_Type`) VALUES
+(1, 1, 'doc.com', 'google doc'),
+(2, 2, 'onedrive.com', 'onedrive'),
+(3, 3, 'doc1.com', 'drive'),
+(4, 5, 'link', 'doc'),
+(6, 8, 'docforapp6.com', 'pdf'),
+(7, 8, 'docforapp8.com', 'EXCEL'),
+(8, 7, 'janedoc.doc', 'docx'),
+(9, 7, 'janedoc2.docx', 'DOC');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `documents_with_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `documents_with_users` (
+`App_Num` int(11)
+,`Doc_Num` int(11)
+,`UIN` int(11)
+,`Link` varchar(255)
+,`Doc_Type` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -157,6 +195,30 @@ CREATE TABLE `event` (
   `Event_Type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `event`
+--
+
+INSERT INTO `event` (`Event_ID`, `UIN`, `Program_Num`, `Start_Date`, `Time`, `Location`, `End_Date`, `Event_Type`) VALUES
+(1, 1, 1, '2019-05-21', '12:12:12', 'CSTAT', '2019-06-21', 'party'),
+(3, 1, 3, '2020-05-21', '12:12:12', 'CSTAT', '2020-06-21', 'party'),
+(5, 1, 4, '2023-05-21', '12:12:12', 'CSTAT', '2023-06-21', 'dinner'),
+(6, 1, 5, '2023-12-04', '22:26:00', 'CSTAT', '2023-12-04', 'party'),
+(10, 1, 1, '2023-12-05', '20:32:00', 'CSTAT', '2023-12-05', 'exam');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `event_attendance`
+-- (See below for the actual view)
+--
+CREATE TABLE `event_attendance` (
+`Event_ID` int(11)
+,`UIN` int(11)
+,`First_Name` varchar(255)
+,`Last_Name` varchar(255)
+);
+
 -- --------------------------------------------------------
 
 --
@@ -168,6 +230,19 @@ CREATE TABLE `event_tracking` (
   `Event_ID` int(11) NOT NULL,
   `UIN` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `event_tracking`
+--
+
+INSERT INTO `event_tracking` (`ET_NUM`, `Event_ID`, `UIN`) VALUES
+(1, 1, 2),
+(2, 1, 5),
+(3, 3, 2),
+(4, 3, 5),
+(5, 5, 5),
+(6, 6, 2),
+(7, 6, 5);
 
 -- --------------------------------------------------------
 
@@ -208,17 +283,14 @@ CREATE TABLE `programs` (
   `Prog_Des` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `track`
+-- Dumping data for table `programs`
 --
 
-CREATE TABLE `track` (
-  `Tracking_Num` int(11) NOT NULL,
-  `Program_Num` int(11) NOT NULL,
-  `Student_Num` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
+(1, 'Program one', 'the program that is one'),
+(2, 'program 2', '2'),
+(3, 'program 3', '3');
 
 -- --------------------------------------------------------
 
@@ -244,7 +316,27 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`) VALUES
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
-(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'student', 'john.doe@example.com', 'john.doe#5678');
+(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
+(4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
+(5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `documents_with_users`
+--
+DROP TABLE IF EXISTS `documents_with_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `documents_with_users`  AS SELECT `application`.`App_Num` AS `App_Num`, `documentation`.`Doc_Num` AS `Doc_Num`, `application`.`UIN` AS `UIN`, `documentation`.`Link` AS `Link`, `documentation`.`Doc_Type` AS `Doc_Type` FROM (`application` join `documentation` on(`application`.`App_Num` = `documentation`.`App_Num`)) ORDER BY `application`.`App_Num` ASC, `documentation`.`Doc_Num` ASC ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `event_attendance`
+--
+DROP TABLE IF EXISTS `event_attendance`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
 
 --
 -- Indexes for dumped tables
@@ -254,7 +346,7 @@ INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, 
 -- Indexes for table `application`
 --
 ALTER TABLE `application`
-  ADD PRIMARY KEY (`App_NUM`),
+  ADD PRIMARY KEY (`App_Num`),
   ADD KEY `Program_Num` (`Program_Num`),
   ADD KEY `UIN` (`UIN`);
 
@@ -294,55 +386,10 @@ ALTER TABLE `collegestudents`
   ADD PRIMARY KEY (`UIN`);
 
 --
--- Indexes for table `documentation`
---
-ALTER TABLE `documentation`
-  ADD PRIMARY KEY (`Doc_Num`),
-  ADD KEY `App_Num` (`App_Num`);
-
---
--- Indexes for table `event`
---
-ALTER TABLE `event`
-  ADD PRIMARY KEY (`Event_ID`),
-  ADD KEY `UIN` (`UIN`),
-  ADD KEY `Program_Num` (`Program_Num`);
-
---
--- Indexes for table `event_tracking`
---
-ALTER TABLE `event_tracking`
-  ADD PRIMARY KEY (`ET_NUM`),
-  ADD KEY `Event_ID` (`Event_ID`),
-  ADD KEY `UIN` (`UIN`);
-
---
--- Indexes for table `internship`
---
-ALTER TABLE `internship`
-  ADD PRIMARY KEY (`Intern_ID`);
-
---
--- Indexes for table `intern_app`
---
-ALTER TABLE `intern_app`
-  ADD PRIMARY KEY (`IA_Num`),
-  ADD KEY `UIN` (`UIN`),
-  ADD KEY `Intern_ID` (`Intern_ID`);
-
---
 -- Indexes for table `programs`
 --
 ALTER TABLE `programs`
   ADD PRIMARY KEY (`Program_Num`);
-
---
--- Indexes for table `track`
---
-ALTER TABLE `track`
-  ADD PRIMARY KEY (`Tracking_Num`),
-  ADD KEY `Program_Num` (`Program_Num`),
-  ADD KEY `Student_Num` (`Student_Num`);
 
 --
 -- Indexes for table `users`
@@ -358,7 +405,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `application`
 --
 ALTER TABLE `application`
-  MODIFY `App_NUM` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `App_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `certification`
@@ -388,19 +435,19 @@ ALTER TABLE `class_enrollment`
 -- AUTO_INCREMENT for table `documentation`
 --
 ALTER TABLE `documentation`
-  MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `Event_ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Event_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `event_tracking`
 --
 ALTER TABLE `event_tracking`
-  MODIFY `ET_NUM` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ET_NUM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `internship`
@@ -418,7 +465,7 @@ ALTER TABLE `intern_app`
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `Program_Num` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Program_Num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `track`
@@ -429,13 +476,6 @@ ALTER TABLE `track`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `application`
---
-ALTER TABLE `application`
-  ADD CONSTRAINT `application_ibfk_1` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`),
-  ADD CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UIN`) REFERENCES `collegestudents` (`UIN`);
 
 --
 -- Constraints for table `cert_enrollment`
@@ -462,7 +502,7 @@ ALTER TABLE `collegestudents`
 -- Constraints for table `documentation`
 --
 ALTER TABLE `documentation`
-  ADD CONSTRAINT `documentation_ibfk_1` FOREIGN KEY (`App_Num`) REFERENCES `application` (`App_NUM`);
+  ADD CONSTRAINT `documentation_ibfk_1` FOREIGN KEY (`App_Num`) REFERENCES `application` (`App_Num`);
 
 --
 -- Constraints for table `event`
@@ -492,6 +532,7 @@ ALTER TABLE `track`
   ADD CONSTRAINT `track_ibfk_1` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`),
   ADD CONSTRAINT `track_ibfk_2` FOREIGN KEY (`Student_Num`) REFERENCES `collegestudents` (`UIN`);
 COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -43,9 +43,7 @@
 <body>
 
     <h1>Document Management</h1>
-    <?php
-        echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";
-    ?>
+    <?php echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";?>
     <a href="index.php">Home</a>
 
     <!-- Selection form -->
@@ -83,7 +81,9 @@
                 $selectedID = $_POST['select_doc_num'];
                 // Query to fetch users based on the selected Event ID
                 if ( $selectedID == "all" ) {
-                    $sqlSelect = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                    // $sqlSelect = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                    $sqlSelect = "SELECT * FROM documents_with_users WHERE UIN = '$currUIN' ORDER BY Doc_Num, App_Num";
+
                 } else {
                     $sqlSelect = "SELECT * FROM documentation WHERE Doc_Num = '$selectedID'";
                 }
@@ -149,7 +149,9 @@
         <select name = "delete_Doc_Num" id = "delete_Doc_Num">
             <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                $query = "SELECT * FROM documents_with_users WHERE UIN = '$currUIN' ORDER BY Doc_Num, App_Num";
+                
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -199,7 +201,9 @@
         <select name = "update_Doc_Num" id = "update_Doc_Num">
             <option value="none" selected disabled hidden>Select an Option</option>
             <?php
-                $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                $query = "SELECT * FROM documents_with_users WHERE UIN = '$currUIN' ORDER BY Doc_Num, App_Num";
+
                 $result = $conn->query($query);
                 if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
