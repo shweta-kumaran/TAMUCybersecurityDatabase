@@ -399,9 +399,9 @@
         if($formId == "select"){
             // Get the selected role from the form
             $selectedRole = $_POST['role'];
+            $ownUIN = $_SESSION['UIN'];
             // Query to fetch users based on the selected role
             if($selectedRole == "own"){
-                $ownUIN = $_SESSION['UIN'];
                 $sql = "SELECT * FROM users WHERE UIN = $ownUIN";
             }else if($selectedRole == 'student'){
                 $sql = "SELECT * FROM student_users";
@@ -412,28 +412,63 @@
             }
 
             $result = $conn->query($sql);
-        
+            
+            echo "<table border='1'>";
+            echo "<thead>";
+            echo "<tr>";
+            echo "<th>UIN</th>";
+            echo "<th>First Name</th>";
+            echo "<th>Last Name</th>";
+            echo "<th>Email</th>";
+            echo "<th>Role</th>";
+            if ($selectedRole == 'student' || collegestudentExists($ownUIN, $conn)) {
+                echo "<th>Gender</th>";
+                echo "<th>GPA</th>";
+                echo "<th>Major</th>";
+                echo "<th>Expected Graduation</th>";
+                echo "<th>School</th>";
+                echo "<th>Current Classification</th>";
+                echo "<th>Phone</th>";
+                echo "<th>Student Type</th>";
+            }
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
+            
             if ($result->num_rows > 0) {
                 // Output data of each user
                 echo "<p class = 'result'>";
                 while ($row = $result->fetch_assoc()) {
-                    echo "UIN: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
-                    if($row["User_Type"] == "student"){
+                    echo "<tr>";
+                    echo "<td>" . $row["UIN"] . "</td>";
+                    echo "<td>" . $row["First_Name"] . "</td>";
+                    echo "<td>" . $row["Last_Name"] . "</td>";
+                    echo "<td>" . $row["Email"] . "</td>";
+                    echo "<td>" . $row["User_Type"] . "</td>";
+                    if ($row["User_Type"] == "student") {
+                        // Fetch student details and output
                         $studentUIN = $row["UIN"];
                         $studentSql = "SELECT * FROM collegestudents WHERE UIN=$studentUIN";
                         $studentResult = $conn->query($studentSql);
                         $stuRow = $studentResult->fetch_assoc();
-                        echo " - Gender: " . $stuRow['Gender'] . " - GPA: " . $stuRow['GPA'] . 
-                        " - Major: " . $stuRow['Major'] . " - Expected Graduation: " . $stuRow['Expected_Graduation'] . 
-                        " - School: " . $stuRow['School'] . " - Current Classification: " . $stuRow['Current_Classification'] . 
-                        " - Phone: " . $stuRow['Phone'] . " - Student Type: " . $stuRow['Student_Type'];
+                        echo "<td>" . $stuRow['Gender'] . "</td>";
+                        echo "<td>" . $stuRow['GPA'] . "</td>";
+                        echo "<td>" . $stuRow['Major'] . "</td>";
+                        echo "<td>" . $stuRow['Expected_Graduation'] . "</td>";
+                        echo "<td>" . $stuRow['School'] . "</td>";
+                        echo "<td>" . $stuRow['Current_Classification'] . "</td>";
+                        echo "<td>" . $stuRow['Phone'] . "</td>";
+                        echo "<td>" . $stuRow['Student_Type'] . "</td>";
                     }
-                    echo "<br>";
+                    echo "</tr>";
                 }
                 echo "</p>";
             } else {
-                echo "<p class = 'response'>No users found for the selected role.</p>";
+                echo "<tr><td colspan='14'>No users found for the selected role.</td></tr>";
             }
+            
+            echo "</tbody>";
+            echo "</table>";
         }
     }
 ?>
