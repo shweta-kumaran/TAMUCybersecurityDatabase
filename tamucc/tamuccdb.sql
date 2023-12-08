@@ -381,7 +381,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`) VALUES
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
-(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
+(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'student', 'john.doe@example.com', 'john.doe#5678'),
 (4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
 (5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678'),
 (8, 'John', NULL, 'Doe', 'johndoe1', 'password', 'admin', 'johndoe@gmail.com', 'johndoe2023');
