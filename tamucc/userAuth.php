@@ -287,19 +287,28 @@
             echo "<input type='text' name='uinToChange' id='uinToChange' value='' required><br>";
         }else{
             $userUIN = $_SESSION['UIN'];
-            echo "<input type='hidden' name='form_id' value='$userUIN'>";
+            echo "<input type='hidden' name='uinToChange' value='$userUIN'>";
         }
 
         ?>
 
         <label for="columnToChange">Attribute to Change:</label>
         <select name="columnToChange" id="columnToChange">
-            <option value="First_Name">First Name</option>
-            <option value="M_Initial">Middle Initial</option>
-            <option value="Last_Name">Last Name</option>
-            <option value="Username">Username</option>
-            <option value="Passwords">Password</option>
-            <option value="User_Type">User Type</option>
+            <?php
+            if($_SESSION['role'] == 'admin'){
+                echo '<option value="User_Type">User Type</option>';
+                echo '<option value="GPA">GPA</option>';
+                echo '<option value="Major">Major</option>';
+                echo '<option value="Minor1">Minor1</option>';
+                echo '<option value="Minor2">Minor2</option>';
+                echo '<option value="Expected_Graduation">Expected Graduation</option>';
+                echo '<option value="School">School</option>';
+                echo '<option value="Current_Classification">Current Classification</option>';
+                echo '<option value="Phone">Phone Number</option>';
+                echo '<option value="Student_type">Student Type</option>';
+            }
+            ?>
+            
             <option value="Email">Email</option>
             <option value="Discord_Name">Discord Name</option>
             <option value="Gender">Gender</option>
@@ -308,15 +317,11 @@
             <option value="USCitizen">US Citizen</option>
             <option value="First_Generation">First Generation</option>
             <option value="DoB">Date of Birth</option>
-            <option value="GPA">GPA</option>
-            <option value="Major">Major</option>
-            <option value="Minor1">Minor1</option>
-            <option value="Minor2">Minor2</option>
-            <option value="Expected_Graduation">Expected Graduation</option>
-            <option value="School">School</option>
-            <option value="Current_Classification">Current Classification</option>
-            <option value="Phone">Phone Number</option>
-            <option value="Student_type">Student Type</option>
+            <option value="First_Name">First Name</option>
+            <option value="M_Initial">Middle Initial</option>
+            <option value="Last_Name">Last Name</option>
+            <option value="Username">Username</option>
+            <option value="Passwords">Password</option>
         </select><br>
 
         <label for="newValue">New Value:</label>
@@ -328,7 +333,6 @@
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $formId = $_POST['form_id'];
-
             if($formId == "update"){
                 $uinToChange = $_POST['uinToChange'];
                 $attributeToChange = $_POST['columnToChange'];
