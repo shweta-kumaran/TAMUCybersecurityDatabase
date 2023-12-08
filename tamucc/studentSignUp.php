@@ -37,7 +37,7 @@
 
    <div class="header">
       <h1>Document Management</h1>
-      <a href="index.php">Home</a>
+      <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     
    <h1>Sign Up Here</h1>

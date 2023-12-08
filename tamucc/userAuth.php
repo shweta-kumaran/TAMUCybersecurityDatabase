@@ -63,7 +63,7 @@
 <body>
     <div class="header">
         <h1>User Management and Authentication</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     
     <h2>Insertion</h2>

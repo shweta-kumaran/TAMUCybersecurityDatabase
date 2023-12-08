@@ -62,7 +62,7 @@
 
     <div class="header">
         <h1>Event Management</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     
     <?php //echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";?>

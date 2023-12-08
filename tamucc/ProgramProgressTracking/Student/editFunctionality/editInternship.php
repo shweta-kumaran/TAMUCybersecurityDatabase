@@ -50,7 +50,7 @@ $result = fetchInternships($conn);
 <body>
     <div class="header">
         <h2>Select an Internship to Edit</h2>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
 
 <form action="" method="post">

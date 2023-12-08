@@ -50,7 +50,7 @@ $result = fetchClasses($conn);
 <body>
     <div class="header">
         <h2>Select a Class to Edit</h2>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
 
 <form action="" method="post">

@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
 <body>
     <div class="header">
         <h1>Delete Progress Records</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     <form action="" method="post">
         <select name="recordType">

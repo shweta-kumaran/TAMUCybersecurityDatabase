@@ -53,7 +53,7 @@
 <body>
     <div class="header">
         <h1>Programs</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     <form action="" method="post">
         <label for="username">Username:</label>

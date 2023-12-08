@@ -44,7 +44,7 @@
 <body>
     <div class="header">
         <h1>Submit an Application</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">

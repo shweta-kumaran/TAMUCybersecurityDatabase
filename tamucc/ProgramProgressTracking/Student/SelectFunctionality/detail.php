@@ -52,7 +52,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 <body>
     <div class="header">
         <h1>Details</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     <?php if ($item): ?>
         <?php foreach($item as $key => $value): ?>

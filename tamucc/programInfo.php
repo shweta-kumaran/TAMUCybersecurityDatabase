@@ -59,7 +59,7 @@
 <body>
     <div class="header">
         <h1>Add a New Program</h1>
-        <a href="index.php">Home</a>
+        <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
     </div>
     <form method="post" action="programInfo.php">
         <input type="hidden" name="form_id" value="insert">
