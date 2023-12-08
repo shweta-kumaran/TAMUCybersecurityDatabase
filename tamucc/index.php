@@ -78,6 +78,7 @@
         if($_SESSION['role'] == 'Student' or $_SESSION['role'] == 'student'){
             echo "<h3>Student Sites</h3>"; 
             echo "<a href='studentDocuments.php'>Student Documents</a> <br>";
+            echo "<a href='applicationInfo.php'>Application Information Mangement</a> <br>";
         }    
     ?>
     <?php
