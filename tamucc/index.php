@@ -72,15 +72,15 @@
     ?>
 
     <a href="userAuth.php">User Authentication</a> <br>
-    <a href="ProgramProgressTracking/addClass.html">Add New Class</a> <br>
-    <a href="ProgramProgressTracking/addInternship.html">Add New Internship</a> <br>
-    <a href="ProgramProgressTracking/addCertification.html">Add New Certification</a> <br>
     <a href="studentDocuments.php">Student Documents</a> <br>
+    <a href="ProgramProgressTracking/Student/studentAccess.html">Program Progress Tracking</a> <br>
     <?php
         if($_SESSION['role'] == 'admin'){
             echo "<h3>Admin Only Sites</h3> <br>";    
             echo "<a href='eventMan.php'>Event Management</a> <br>";
-        }    
+        }   
+        
+     
     ?>
     
 
