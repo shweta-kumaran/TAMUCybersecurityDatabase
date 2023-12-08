@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 09, 2023 at 02:40 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Dec 08, 2023 at 11:13 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,18 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `tamuccdb`
 --
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `active_programs`
--- (See below for the actual view)
---
-CREATE TABLE `active_programs` (
-`Program_Num` int(10)
-,`Prog_Name` varchar(255)
-,`Prog_Des` varchar(255)
-);
 
 -- --------------------------------------------------------
 
@@ -71,6 +59,7 @@ CREATE TABLE `application` (
 --
 
 INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
+(5, 3, 2, 'cert', 'cert', 'cert'),
 (7, 3, 5, 'cert', 'cert', 'cert\r\n'),
 (8, 3, 2, NULL, NULL, '');
 
@@ -86,6 +75,9 @@ CREATE TABLE `certification` (
   `Cert_Name` varchar(255) NOT NULL,
   `Cert_Des` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `certification` (`Cert_ID`, `Cert_Level`, `Cert_Name`, `Cert_Des`) VALUES
+(1234, 'B', 'CPR' , 'Recuscitation 101');
 
 -- --------------------------------------------------------
 
@@ -104,6 +96,8 @@ CREATE TABLE `cert_enrollment` (
   `Cert_Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `cert_enrollment` (`CertE_Num`, `UIN`, `Cert_ID`, `Stat`, `Training_Stat`, `Program_Num`, `Semester`, `Cert_Year`) VALUES
+(12345, 2, 1234, 'C', 'C', 5, 'F', 2023);
 -- --------------------------------------------------------
 
 --
@@ -116,6 +110,9 @@ CREATE TABLE `classes` (
   `Class_Desc` varchar(255) NOT NULL,
   `Class_Type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `classes` (`Class_ID`, `Class_Name`, `Class_Desc`, `Class_Type`) VALUES
+(310, 'Databases', 'Intro to SQL' , 'F');
 
 -- --------------------------------------------------------
 
@@ -131,6 +128,9 @@ CREATE TABLE `class_enrollment` (
   `Semester` varchar(255) NOT NULL,
   `Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `class_enrollment` (`CE_Num`, `UIN`, `Class_ID`, `Stat`, `Semester`,`Year` ) VALUES
+(1, 2, 310 , 'C', 'S', 2024);
 
 -- --------------------------------------------------------
 
@@ -204,6 +204,7 @@ INSERT INTO `documentation` (`Doc_Num`, `App_Num`, `Link`, `Doc_Type`) VALUES
 (1, 1, 'doc.com', 'google doc'),
 (2, 2, 'onedrive.com', 'onedrive'),
 (3, 3, 'doc1.com', 'drive'),
+(4, 5, 'link', 'doc'),
 (6, 8, 'docforapp6.com', 'pdf'),
 (7, 8, 'docforapp8.com', 'EXCEL'),
 (8, 7, 'janedoc.doc', 'docx'),
@@ -302,6 +303,8 @@ CREATE TABLE `internship` (
   `is_Gov` binary(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `internship` (`Intern_ID`, `Name`, `Description`, `is_Gov`) VALUES
+(1234, 'Microsoft' , 'SWE', '0');
 -- --------------------------------------------------------
 
 --
@@ -316,6 +319,8 @@ CREATE TABLE `intern_app` (
   `Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `intern_app` (`IA_num`, `UIN`, `Intern_ID`, `Status`, `Year`) VALUES
+(001234, 2, 1234, 'C' , '2023');
 -- --------------------------------------------------------
 
 --
@@ -325,28 +330,17 @@ CREATE TABLE `intern_app` (
 CREATE TABLE `programs` (
   `Program_Num` int(10) NOT NULL,
   `Prog_Name` varchar(255) NOT NULL,
-  `Prog_Des` varchar(255) NOT NULL,
-  `Prog_Access` int(1) DEFAULT NULL
+  `Prog_Des` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `programs`
 --
 
-INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) VALUES
-(1, 'Program one', 'the program that is one', 1),
-(2, 'program 2', '2', 0),
-(3, 'program 3', '3', 1);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `program_names`
--- (See below for the actual view)
---
-CREATE TABLE `program_names` (
-`Prog_Name` varchar(255)
-);
+INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
+(1, 'Program one', 'the program that is one'),
+(2, 'program 2', '2'),
+(3, 'program 3', '3');
 
 -- --------------------------------------------------------
 
@@ -378,16 +372,19 @@ CREATE TABLE `track` (
   `Student_Num` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `track`
---
-
 INSERT INTO `track` (`Tracking_Num`, `Program_Num`, `Student_Num`) VALUES
 (1, 1, 2),
 (2, 2, 2),
 (3, 3, 5);
 
 -- --------------------------------------------------------
+
+CREATE TABLE reports (
+    report_id INT AUTO_INCREMENT PRIMARY KEY,
+    report_name VARCHAR(255) NOT NULL,
+    report_content TEXT,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
 --
 -- Table structure for table `users`
@@ -411,19 +408,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`) VALUES
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
-(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
+(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'student', 'john.doe@example.com', 'john.doe#5678'),
 (4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
 (5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678'),
 (8, 'John', NULL, 'Doe', 'johndoe1', 'password', 'admin', 'johndoe@gmail.com', 'johndoe2023');
-
--- --------------------------------------------------------
-
---
--- Structure for view `active_programs`
---
-DROP TABLE IF EXISTS `active_programs`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `active_programs`  AS SELECT `programs`.`Program_Num` AS `Program_Num`, `programs`.`Prog_Name` AS `Prog_Name`, `programs`.`Prog_Des` AS `Prog_Des` FROM `programs` WHERE `programs`.`Prog_Access` = 1 ;
 
 -- --------------------------------------------------------
 
@@ -460,15 +448,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `program_names`
---
-DROP TABLE IF EXISTS `program_names`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `program_names`  AS SELECT `programs`.`Prog_Name` AS `Prog_Name` FROM `programs` ;
 
 -- --------------------------------------------------------
 
@@ -539,6 +518,26 @@ ALTER TABLE `programs`
   ADD PRIMARY KEY (`Program_Num`),
   ADD KEY `prog_name_idx` (`Prog_Name`);
 
+-- Structure for view `program_student_counts`
+--
+DROP VIEW IF EXISTS `program_student_counts`;
+
+CREATE ALGORITHM=UNDEFINED 
+DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER 
+VIEW `program_student_counts` AS 
+SELECT 
+    p.Prog_Name AS `Prog_Name`,
+    COUNT(t.Student_Num) AS `StudentCount`
+FROM 
+    `programs` p
+JOIN 
+    `track` t ON p.Program_Num = t.Program_Num
+GROUP BY 
+    p.Prog_Name;
+
+--
+
 --
 -- Indexes for table `track`
 --
@@ -598,7 +597,7 @@ ALTER TABLE `documentation`
 -- AUTO_INCREMENT for table `track`
 --
 ALTER TABLE `track`
-  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

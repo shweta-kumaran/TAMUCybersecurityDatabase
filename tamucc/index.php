@@ -97,6 +97,7 @@
             echo "<h3>Admin Sites</h3>";    
             echo "<a href='eventMan.php'>Event Management</a> <br>";
             echo "<a href='programInfo.php'>Program Information Management</a><br>";
+            echo "<a href='ProgramProgressTracking/admin/adminAccess.html'>Admin Program Tracking</a><br>";
         }   
     ?>
     
