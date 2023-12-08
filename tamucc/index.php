@@ -54,6 +54,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/styles.css">
     <title>Document</title>
 </head>
 <body>
@@ -68,20 +69,20 @@
     </form>
 
     <?php
-        echo "<h2>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h2><br>";
+        echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";
     ?>
 
     <a href="userAuth.php">User Authentication</a> <br>
     <a href="ProgramProgressTracking/Student/studentAccess.html">Program Progress Tracking</a> <br>
     <?php
-        if($_SESSION['role'] == 'Student'){
-            echo "<h3>Student Sites</h3> <br>"; 
+        if($_SESSION['role'] == 'Student' or $_SESSION['role'] == 'student'){
+            echo "<h3>Student Sites</h3>"; 
             echo "<a href='studentDocuments.php'>Student Documents</a> <br>";
         }    
     ?>
     <?php
         if($_SESSION['role'] == 'admin'){
-            echo "<h3>Admin Sites</h3> <br>";    
+            echo "<h3>Admin Sites</h3>";    
             echo "<a href='eventMan.php'>Event Management</a> <br>";
         }   
     ?>

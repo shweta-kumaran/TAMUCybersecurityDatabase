@@ -1,0 +1,66 @@
+/* Style the header */
+.header {
+   background-color: #776B5D;
+   padding: 2%;
+   text-align: center;
+ }
+
+body {
+   background-color:#F3EEEA;
+   margin:5%;
+ }
+
+ h1 {
+   color: black;
+ }
+ p {
+   color: black;
+ }
+
+ a {
+   margin:1%;
+ }
+
+ form {
+   background-color: #B0A695;
+   padding:1%;
+   width:fit-content;
+
+ }
+
+ a:link, a:visited {
+   background-color: grey;
+   color: white;
+   padding: 1.5% 3%;
+   
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+ }
+ 
+ a:hover, a:active {
+   background-color: darkgrey;
+ }
+
+ .result {
+   color:black;
+   background-color: #EBE3D5;
+   padding:1%;
+   width:fit-content;
+   margin:1%;
+ }
+
+ .response {
+   background-color: #EBE3D5;
+   color:black;
+   padding:1%;
+   margin:1%;
+   width:fit-content;
+ }
+
+ .welcome {
+   background-color: #B0A695;
+   padding:1%;
+   width:fit-content;
+ }
+
