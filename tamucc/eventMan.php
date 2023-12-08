@@ -142,10 +142,31 @@
         <input type="hidden" name="form_id" value="insert">
 
         <label for="UIN">UIN:</label>
-        <input type="text" name="UIN" id="UIN" value="" required><br>
+        <select name = "UIN" id = "UIN" required>
+            <?php
+                $query = "SELECT * FROM users WHERE User_Type = 'admin'";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["UIN"] . "'>" . $row["UIN"] . "</option>";
+                    }
+                } 
+            ?>
+        </select><br>
+
     
         <label for="Program_Num">Program Number:</label>
-        <input type="int" name="Program_Num" id="Program_Num" value="" required><br>
+        <select name = "Program_Num" id = "Program_Num" required>
+            <?php
+                $query = "SELECT * FROM programs";
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["Program_Num"] . "'>" . $row["Program_Num"] . "</option>";
+                    }
+                } 
+            ?>
+        </select><br>
 
         <label for="Start_Date">Start Date:</label>
         <input type="date" name="Start_Date" id="Start_Date" value="" required><br>
@@ -371,7 +392,7 @@
 
                 } else if ($add_remove == "remove") {
                     if(eventStudentExists($selectedID, $selectedUIN, $conn)){
-                        $sqlDelete = "DELETE FROM `event` WHERE Event_ID = '$selectedID'";
+                        $sqlDelete = "DELETE FROM `event_tracking` WHERE UIN = '$selectedUIN'";
                         if ($conn->query($sqlDelete) === TRUE) {
                             echo "Student with UIN $selectedUIN removed from Event with Event ID $selectedID successfully!";
                         } else {

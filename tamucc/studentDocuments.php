@@ -108,7 +108,21 @@
         <input type="hidden" name="form_id" value="insert">
 
         <label for="App_Num">Application Number:</label>
-        <input type="int" name="App_Num" id="App_Num" value="" required><br>
+        <!-- <input type="int" name="App_Num" id="App_Num" value="" required><br> -->
+        <select name = "App_Num" id = "App_Num">
+            <option value="none" selected disabled hidden>Select an Application Number</option>
+            <?php
+                // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
+                $query = "SELECT * FROM application WHERE UIN = '$currUIN'";
+                
+                $result = $conn->query($query);
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["App_Num"] . "'>" . $row["App_Num"] . "</option>";
+                    }
+                } 
+            ?>
+        </select><br>
     
         <label for="Link">Link:</label>
         <input type="text" name="Link" id="Link" value="" required><br>
