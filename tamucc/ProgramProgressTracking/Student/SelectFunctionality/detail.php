@@ -47,7 +47,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 <html>
 <head>
     <title>Detail Page</title>
-    <link rel="stylesheet" href="includes/styles.css">
+    <link rel="stylesheet" href="/TAMUCybersecurityDatabase/tamucc/includes/styles.css">
 </head>
 <body>
     <div class="header">

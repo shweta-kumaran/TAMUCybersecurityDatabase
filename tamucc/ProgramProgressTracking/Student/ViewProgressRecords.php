@@ -26,7 +26,7 @@ $classes = fetchAll($conn, "classes");
 <html>
 <head>
     <title>Program Progress Tracking</title>
-    <link rel="stylesheet" href="includes/styles.css">
+    <link rel="stylesheet" href="/TAMUCybersecurityDatabase/tamucc/includes/styles.css">
 </head>
 <body>
     <div class="header">

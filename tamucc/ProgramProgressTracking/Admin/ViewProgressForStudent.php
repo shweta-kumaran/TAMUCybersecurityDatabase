@@ -53,7 +53,7 @@ $conn->close();
 <html>
 <head>
     <title>Admin Student Information</title>
-    <link rel="stylesheet" href="includes/styles.css">
+    <link rel="stylesheet" href="/TAMUCybersecurityDatabase/tamucc/includes/styles.css">
 </head>
 <body>
 

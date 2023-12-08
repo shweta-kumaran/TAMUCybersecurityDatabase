@@ -45,7 +45,7 @@ $result = fetchClasses($conn);
 <html>
 <head>
     <title>Edit Class</title>
-    <link rel="stylesheet" href="includes/styles.css">
+    <link rel="stylesheet" href="/TAMUCybersecurityDatabase/tamucc/includes/styles.css">
 </head>
 <body>
     <div class="header">

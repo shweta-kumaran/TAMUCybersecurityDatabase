@@ -1,4 +1,5 @@
 <?php
+echo '    <link rel="stylesheet" href="/TAMUCybersecurityDatabase/tamucc/includes/styles.css">';
 
 $dbServername = "localhost";
 $dbUsername = "root";
