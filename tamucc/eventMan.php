@@ -72,7 +72,7 @@
         <input type="hidden" name="form_id" value="select">
 
         <label for = "select_event_ID">Select all events or an event ID:</label>
-        <select name = "select_event_ID" id = "select_event_ID">
+        <select name = "select_event_ID" id = "select_event_ID" required>
             <option value = "all"> All Events </option>
 
             <?php
@@ -230,7 +230,7 @@
         <input type="hidden" name="form_id" value="delete">
 
         <label for = "delete_event_ID">Select the event by EventID to delete:</label>
-        <select name = "delete_event_ID" id = "delete_event_ID">
+        <select name = "delete_event_ID" id = "delete_event_ID" required>
             <option value="none" selected disabled hidden>Select an ID</option>
             <?php
                 $query = "SELECT * FROM event";
@@ -274,7 +274,7 @@
         <input type="hidden" name="form_id" value="update">
 
         <label for = "update_event_ID">Select the event ID for the event you wish to update:</label>
-        <select name = "update_event_ID" id = "update_event_ID">
+        <select name = "update_event_ID" id = "update_event_ID" required>
             <option value="none" selected disabled hidden>Select an ID</option>
             <?php
                 $query = "SELECT * FROM event";
@@ -288,7 +288,7 @@
         </select><br>
         
         <label for="columnToChange">Event Attribute to Change:</label>
-        <select name="columnToChange" id="columnToChange">
+        <select name="columnToChange" id="columnToChange" required>
             <option value="none" selected disabled hidden>Select an Attribute</option>
             <option value="UIN">UIN</option>
             <option value="Program_Num">Program Number</option>
@@ -336,7 +336,7 @@
         <input type="hidden" name="form_id" value="edit_attendance">
 
         <label for = "select_event_ID">Select an event ID to edit attendance:</label>
-        <select name = "select_event_ID" id = "select_event_ID">
+        <select name = "select_event_ID" id = "select_event_ID" required>
         <option value="none" selected disabled hidden>Select an Event ID</option>
 
             <?php
@@ -351,7 +351,7 @@
         </select><br>
 
         <label for = "select_UIN">Select a student by UIN to edit:</label>
-        <select name = "select_UIN" id = "select_UIN">
+        <select name = "select_UIN" id = "select_UIN" required>
         <option value="none" selected disabled hidden>Select a Student UIN</option>
 
             <?php
@@ -366,7 +366,7 @@
         </select> <br>
 
         <label for = "add_remove">Add or remove the student?:</label>
-        <select name = "add_remove" id = "add_remove">
+        <select name = "add_remove" id = "add_remove" required>
             <option value = "none" selected disabled hidden>Select Add or Remove</option>
             <option value = "add">Add</option>
             <option value = "remove">Remove</option>

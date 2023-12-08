@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 05:15 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Dec 08, 2023 at 10:34 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,7 +41,6 @@ CREATE TABLE `application` (
 --
 
 INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
-(2, 1, 2, 'cert 1', 'cert 2', 'puropose statement'),
 (5, 3, 2, 'cert', 'cert', 'cert'),
 (7, 3, 5, 'cert', 'cert', 'cert\r\n'),
 (8, 3, 2, NULL, NULL, '');
@@ -295,6 +294,18 @@ INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `track`
+--
+
+CREATE TABLE `track` (
+  `Tracking_Num` int(11) NOT NULL,
+  `Program_Num` int(11) NOT NULL,
+  `Student_Num` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -386,10 +397,25 @@ ALTER TABLE `collegestudents`
   ADD PRIMARY KEY (`UIN`);
 
 --
+-- Indexes for table `documentation`
+--
+ALTER TABLE `documentation`
+  ADD PRIMARY KEY (`Doc_Num`);
+
+--
 -- Indexes for table `programs`
 --
 ALTER TABLE `programs`
-  ADD PRIMARY KEY (`Program_Num`);
+  ADD PRIMARY KEY (`Program_Num`),
+  ADD KEY `prog_name_idx` (`Prog_Name`);
+
+--
+-- Indexes for table `track`
+--
+ALTER TABLE `track`
+  ADD PRIMARY KEY (`Tracking_Num`),
+  ADD KEY `Program_Num` (`Program_Num`),
+  ADD KEY `Student_Num` (`Student_Num`);
 
 --
 -- Indexes for table `users`
@@ -435,37 +461,7 @@ ALTER TABLE `class_enrollment`
 -- AUTO_INCREMENT for table `documentation`
 --
 ALTER TABLE `documentation`
-  MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `event`
---
-ALTER TABLE `event`
-  MODIFY `Event_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `event_tracking`
---
-ALTER TABLE `event_tracking`
-  MODIFY `ET_NUM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `internship`
---
-ALTER TABLE `internship`
-  MODIFY `Intern_ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `intern_app`
---
-ALTER TABLE `intern_app`
-  MODIFY `IA_Num` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `programs`
---
-ALTER TABLE `programs`
-  MODIFY `Program_Num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `track`
@@ -478,61 +474,12 @@ ALTER TABLE `track`
 --
 
 --
--- Constraints for table `cert_enrollment`
---
-ALTER TABLE `cert_enrollment`
-  ADD CONSTRAINT `cert_enrollment_ibfk_1` FOREIGN KEY (`UIN`) REFERENCES `collegestudents` (`UIN`),
-  ADD CONSTRAINT `cert_enrollment_ibfk_2` FOREIGN KEY (`Cert_ID`) REFERENCES `certification` (`Cert_ID`),
-  ADD CONSTRAINT `cert_enrollment_ibfk_3` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`);
-
---
--- Constraints for table `class_enrollment`
---
-ALTER TABLE `class_enrollment`
-  ADD CONSTRAINT `class_enrollment_ibfk_1` FOREIGN KEY (`UIN`) REFERENCES `collegestudents` (`UIN`),
-  ADD CONSTRAINT `class_enrollment_ibfk_2` FOREIGN KEY (`Class_ID`) REFERENCES `classes` (`Class_ID`);
-
---
--- Constraints for table `collegestudents`
---
-ALTER TABLE `collegestudents`
-  ADD CONSTRAINT `collegestudents_ibfk_1` FOREIGN KEY (`UIN`) REFERENCES `users` (`UIN`);
-
---
--- Constraints for table `documentation`
---
-ALTER TABLE `documentation`
-  ADD CONSTRAINT `documentation_ibfk_1` FOREIGN KEY (`App_Num`) REFERENCES `application` (`App_Num`);
-
---
--- Constraints for table `event`
---
-ALTER TABLE `event`
-  ADD CONSTRAINT `event_ibfk_1` FOREIGN KEY (`UIN`) REFERENCES `users` (`UIN`),
-  ADD CONSTRAINT `event_ibfk_2` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`);
-
---
--- Constraints for table `event_tracking`
---
-ALTER TABLE `event_tracking`
-  ADD CONSTRAINT `event_tracking_ibfk_1` FOREIGN KEY (`Event_ID`) REFERENCES `event` (`Event_ID`),
-  ADD CONSTRAINT `event_tracking_ibfk_2` FOREIGN KEY (`UIN`) REFERENCES `users` (`UIN`);
-
---
--- Constraints for table `intern_app`
---
-ALTER TABLE `intern_app`
-  ADD CONSTRAINT `intern_app_ibfk_1` FOREIGN KEY (`UIN`) REFERENCES `collegestudents` (`UIN`),
-  ADD CONSTRAINT `intern_app_ibfk_2` FOREIGN KEY (`Intern_ID`) REFERENCES `internship` (`Intern_ID`);
-
---
 -- Constraints for table `track`
 --
 ALTER TABLE `track`
   ADD CONSTRAINT `track_ibfk_1` FOREIGN KEY (`Program_Num`) REFERENCES `programs` (`Program_Num`),
   ADD CONSTRAINT `track_ibfk_2` FOREIGN KEY (`Student_Num`) REFERENCES `collegestudents` (`UIN`);
 COMMIT;
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
