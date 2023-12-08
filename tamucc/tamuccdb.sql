@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 08, 2023 at 10:34 AM
+-- Generation Time: Dec 09, 2023 at 02:40 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,36 @@ SET time_zone = "+00:00";
 --
 -- Database: `tamuccdb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `active_programs`
+-- (See below for the actual view)
+--
+CREATE TABLE `active_programs` (
+`Program_Num` int(10)
+,`Prog_Name` varchar(255)
+,`Prog_Des` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `admin_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `admin_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
 
 -- --------------------------------------------------------
 
@@ -41,7 +71,6 @@ CREATE TABLE `application` (
 --
 
 INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
-(5, 3, 2, 'cert', 'cert', 'cert'),
 (7, 3, 5, 'cert', 'cert', 'cert\r\n'),
 (8, 3, 2, NULL, NULL, '');
 
@@ -139,6 +168,24 @@ INSERT INTO `collegestudents` (`UIN`, `Gender`, `HispanicLatino`, `Race`, `USCit
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `deactivated_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `deactivated_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `documentation`
 --
 
@@ -157,7 +204,6 @@ INSERT INTO `documentation` (`Doc_Num`, `App_Num`, `Link`, `Doc_Type`) VALUES
 (1, 1, 'doc.com', 'google doc'),
 (2, 2, 'onedrive.com', 'onedrive'),
 (3, 3, 'doc1.com', 'drive'),
-(4, 5, 'link', 'doc'),
 (6, 8, 'docforapp6.com', 'pdf'),
 (7, 8, 'docforapp8.com', 'EXCEL'),
 (8, 7, 'janedoc.doc', 'docx'),
@@ -279,17 +325,46 @@ CREATE TABLE `intern_app` (
 CREATE TABLE `programs` (
   `Program_Num` int(10) NOT NULL,
   `Prog_Name` varchar(255) NOT NULL,
-  `Prog_Des` varchar(255) NOT NULL
+  `Prog_Des` varchar(255) NOT NULL,
+  `Prog_Access` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `programs`
 --
 
-INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
-(1, 'Program one', 'the program that is one'),
-(2, 'program 2', '2'),
-(3, 'program 3', '3');
+INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) VALUES
+(1, 'Program one', 'the program that is one', 1),
+(2, 'program 2', '2', 0),
+(3, 'program 3', '3', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `program_names`
+-- (See below for the actual view)
+--
+CREATE TABLE `program_names` (
+`Prog_Name` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `student_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `student_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
 
 -- --------------------------------------------------------
 
@@ -302,6 +377,15 @@ CREATE TABLE `track` (
   `Program_Num` int(11) NOT NULL,
   `Student_Num` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `track`
+--
+
+INSERT INTO `track` (`Tracking_Num`, `Program_Num`, `Student_Num`) VALUES
+(1, 1, 2),
+(2, 2, 2),
+(3, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -329,7 +413,35 @@ INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, 
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
 (2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
 (4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
-(5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678');
+(5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678'),
+(8, 'John', NULL, 'Doe', 'johndoe1', 'password', 'admin', 'johndoe@gmail.com', 'johndoe2023');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `active_programs`
+--
+DROP TABLE IF EXISTS `active_programs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `active_programs`  AS SELECT `programs`.`Program_Num` AS `Program_Num`, `programs`.`Prog_Name` AS `Prog_Name`, `programs`.`Prog_Des` AS `Prog_Des` FROM `programs` WHERE `programs`.`Prog_Access` = 1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `admin_users`
+--
+DROP TABLE IF EXISTS `admin_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'admin' ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `deactivated_users`
+--
+DROP TABLE IF EXISTS `deactivated_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deactivated_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'deactivated'WITH CASCADED CHECK OPTION  ;
 
 -- --------------------------------------------------------
 
@@ -348,6 +460,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `program_names`
+--
+DROP TABLE IF EXISTS `program_names`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `program_names`  AS SELECT `programs`.`Prog_Name` AS `Prog_Name` FROM `programs` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `student_users`
+--
+DROP TABLE IF EXISTS `student_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `student_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'student' ;
 
 --
 -- Indexes for dumped tables
@@ -421,7 +551,8 @@ ALTER TABLE `track`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`UIN`);
+  ADD PRIMARY KEY (`UIN`),
+  ADD KEY `idx_UIN` (`UIN`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -467,7 +598,7 @@ ALTER TABLE `documentation`
 -- AUTO_INCREMENT for table `track`
 --
 ALTER TABLE `track`
-  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

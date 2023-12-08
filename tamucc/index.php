@@ -12,7 +12,7 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    echo "Connected successfully";
+    echo "Connected successfully <br>";
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
@@ -76,10 +76,14 @@
     <a href = 'studentSignUp.php'>Students sign up here!</a> <br>
 
     <?php
-        echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";
+        if(isset($_SESSION['role'])){
+            echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";
+        }else{
+            echo "Pleaes log in!";
+        }
     ?>
 
-    <a href="userAuth.php">User Authentication</a> <br>
+    <a href="userAuth.php">User Management and Authentication</a> <br>
     <a href="ProgramProgressTracking/Student/studentAccess.html">Program Progress Tracking</a> <br>
     <?php
         if($_SESSION['role'] == 'Student' or $_SESSION['role'] == 'student'){

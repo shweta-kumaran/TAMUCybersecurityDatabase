@@ -57,10 +57,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/styles.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>Insertion</h1>
+    <a href="index.php">Home</a> <br>
+    <h1>User Management and Authentication</h1>
+    <h2>Insertion</h2>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
     
@@ -69,6 +72,9 @@
     
         <label for="firstName">First Name:</label>
         <input type="text" name="firstName" id="firstName" value="John" required><br>
+
+        <label for="mInitial">Middle Initial:</label>
+        <input type="text" name="mInitial" id="mInitial" value=""><br>
 
         <label for="lastName">Last Name:</label>
         <input type="text" name="lastName" id="lastName" value="Doe" required><br>
@@ -182,6 +188,7 @@
         if($formId == "insert"){
             $newUIN = $_POST['UIN'];
             $newFirstName = $_POST['firstName'];
+            $newMiddleInitial = $_POST['mInitial'];
             $newLastName = $_POST['lastName'];
             $newUsername = $_POST['username'];
             $newPassword = $_POST['password'];
@@ -189,10 +196,14 @@
             $newEmail = $_POST['Email'];
             $newDiscord = $_POST['Discord'];
 
+            if($newMiddleInitial = ""){
+                $newMiddleInitial = NULL;
+            }
+
             if(!userExists($newUIN, $conn)){
 
                 $baseSql = "INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`)
-            VALUES ($newUIN, '$newFirstName', NULL, '$newLastName', '$newUsername', '$newPassword', '$newUsertype', '$newEmail', '$newDiscord')";
+            VALUES ($newUIN, '$newFirstName', '$newMiddleInitial', '$newLastName', '$newUsername', '$newPassword', '$newUsertype', '$newEmail', '$newDiscord')";
 
                 if ($conn->query($baseSql) === TRUE) {
                     echo "Inserted $newUsertype $newFirstName $newLastName with the username $newUsername";
@@ -275,7 +286,7 @@
     }
 ?>
 
-<h1>Updates</h2>
+<h2>Updates</h2>
 <!-- Form 2 -->
     <form method="post" action="">
         <input type="hidden" name="form_id" value="update">
@@ -286,19 +297,28 @@
             echo "<input type='text' name='uinToChange' id='uinToChange' value='' required><br>";
         }else{
             $userUIN = $_SESSION['UIN'];
-            echo "<input type='hidden' name='form_id' value='$userUIN'>";
+            echo "<input type='hidden' name='uinToChange' value='$userUIN'>";
         }
 
         ?>
 
         <label for="columnToChange">Attribute to Change:</label>
         <select name="columnToChange" id="columnToChange">
-            <option value="First_Name">First Name</option>
-            <option value="M_Initial">Middle Initial</option>
-            <option value="Last_Name">Last Name</option>
-            <option value="Username">Username</option>
-            <option value="Passwords">Password</option>
-            <option value="User_Type">User Type</option>
+            <?php
+            if($_SESSION['role'] == 'admin'){
+                echo '<option value="User_Type">User Type</option>';
+                echo '<option value="GPA">GPA</option>';
+                echo '<option value="Major">Major</option>';
+                echo '<option value="Minor1">Minor1</option>';
+                echo '<option value="Minor2">Minor2</option>';
+                echo '<option value="Expected_Graduation">Expected Graduation</option>';
+                echo '<option value="School">School</option>';
+                echo '<option value="Current_Classification">Current Classification</option>';
+                echo '<option value="Phone">Phone Number</option>';
+                echo '<option value="Student_type">Student Type</option>';
+            }
+            ?>
+            
             <option value="Email">Email</option>
             <option value="Discord_Name">Discord Name</option>
             <option value="Gender">Gender</option>
@@ -307,15 +327,11 @@
             <option value="USCitizen">US Citizen</option>
             <option value="First_Generation">First Generation</option>
             <option value="DoB">Date of Birth</option>
-            <option value="GPA">GPA</option>
-            <option value="Major">Major</option>
-            <option value="Minor1">Minor1</option>
-            <option value="Minor2">Minor2</option>
-            <option value="Expected_Graduation">Expected Graduation</option>
-            <option value="School">School</option>
-            <option value="Current_Classification">Current Classification</option>
-            <option value="Phone">Phone Number</option>
-            <option value="Student_type">Student Type</option>
+            <option value="First_Name">First Name</option>
+            <option value="M_Initial">Middle Initial</option>
+            <option value="Last_Name">Last Name</option>
+            <option value="Username">Username</option>
+            <option value="Passwords">Password</option>
         </select><br>
 
         <label for="newValue">New Value:</label>
@@ -327,7 +343,6 @@
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $formId = $_POST['form_id'];
-
             if($formId == "update"){
                 $uinToChange = $_POST['uinToChange'];
                 $attributeToChange = $_POST['columnToChange'];
@@ -356,7 +371,7 @@
     ?>
 
 <!-- Form 3 -->
-<h1>Selection</h1>
+<h2>Selection</h2>
 <form method="post" action="">
     <input type="hidden" name="form_id" value="select">
 
@@ -364,7 +379,6 @@
     <select name="role" id="role">
         <?php 
             if($_SESSION['role'] == "admin"){
-                echo "<option value='all'>All</option>";
                 echo "<option value='student'>Student</option>";
                 echo "<option value='admin'>Admin</option>";
                 echo "<option value='deactivated'>Deactivated</option>";
@@ -383,20 +397,23 @@
             // Get the selected role from the form
             $selectedRole = $_POST['role'];
             // Query to fetch users based on the selected role
-            if($selectedRole == "all"){
-                $sql = "SELECT * FROM users";
-            }else if($selectedRole == "own"){
+            if($selectedRole == "own"){
                 $ownUIN = $_SESSION['UIN'];
                 $sql = "SELECT * FROM users WHERE UIN = $ownUIN";
+            }else if($selectedRole == 'student'){
+                $sql = "SELECT * FROM student_users";
+            }else if($selectedRole == 'admin'){
+                $sql = "SELECT * FROM admin_users";      
             }else{
-                $sql = "SELECT * FROM users WHERE User_Type = '$selectedRole'";
+                $sql = "SELECT * FROM deactivated_users";
             }
+
             $result = $conn->query($sql);
         
             if ($result->num_rows > 0) {
                 // Output data of each user
                 while ($row = $result->fetch_assoc()) {
-                    echo "User ID: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
+                    echo "UIN: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
                     if($row["User_Type"] == "student"){
                         $studentUIN = $row["UIN"];
                         $studentSql = "SELECT * FROM collegestudents WHERE UIN=$studentUIN";
@@ -416,7 +433,7 @@
     }
 ?>
 <!-- Form 4 -->
-<h1>Deletion</h1>
+<h2>Deletion</h2>
     <?php
         if($_SESSION['role'] == 'admin'){
             echo "<form method='post' action=''>";
