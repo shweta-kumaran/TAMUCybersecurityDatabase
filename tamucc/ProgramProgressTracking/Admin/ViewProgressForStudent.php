@@ -53,9 +53,14 @@ $conn->close();
 <html>
 <head>
     <title>Admin Student Information</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-    <h1>Admin Student Information</h1>
+
+   <div class="header">
+       <h1>Admin Student Information</h1>
+      <a href="/TAMUCybersecurityDatabase/tamucc/index.php">Home</a>
+    </div>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         Enter UIN: <input type="text" name="uin">
         <input type="submit" value="Retrieve Information">
