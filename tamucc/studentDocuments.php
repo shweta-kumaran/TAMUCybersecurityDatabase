@@ -53,7 +53,7 @@
         <input type="hidden" name="form_id" value="select">
 
         <label for = "select_doc_num">Select all events or an event ID:</label>
-        <select name = "select_doc_num" id = "select_doc_num">
+        <select name = "select_doc_num" id = "select_doc_num" required>
             <option value = "all"> All Documents </option>
 
             <?php               
@@ -112,7 +112,7 @@
 
         <label for="App_Num">Application Number:</label>
         <!-- <input type="int" name="App_Num" id="App_Num" value="" required><br> -->
-        <select name = "App_Num" id = "App_Num">
+        <select name = "App_Num" id = "App_Num" required>
             <option value="none" selected disabled hidden>Select an Application Number</option>
             <?php
                 // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
@@ -163,7 +163,7 @@
         <input type="hidden" name="form_id" value="delete">
 
         <label for = "delete_Doc_Num">Select the document to delete:</label>
-        <select name = "delete_Doc_Num" id = "delete_Doc_Num">
+        <select name = "delete_Doc_Num" id = "delete_Doc_Num" required>
             <option value="none" selected disabled hidden>Select a Document</option>
             <?php
                 // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
@@ -216,7 +216,7 @@
         <input type="hidden" name="form_id" value="update">
 
         <label for = "update_Doc_Num">Select the Document to Update:</label>
-        <select name = "update_Doc_Num" id = "update_Doc_Num">
+        <select name = "update_Doc_Num" id = "update_Doc_Num" required>
             <option value="none" selected disabled hidden>Select a Document</option>
             <?php
                 // $query = "SELECT * FROM documentation WHERE App_Num IN (SELECT App_Num FROM application WHERE UIN = '$currUIN') ORDER BY Doc_Num, App_Num";
@@ -232,7 +232,7 @@
         </select><br>
         
         <label for="columnToChange">Document Attribute to Change:</label>
-        <select name="columnToChange" id="columnToChange">
+        <select name="columnToChange" id="columnToChange" required>
             <option value="none" selected disabled hidden>Select an Attribute</option>
             <option value="App_Num">Application Number</option>
             <option value="Link">Link</option>
