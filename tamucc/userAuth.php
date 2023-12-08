@@ -57,6 +57,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/styles.css">
     <title>Document</title>
 </head>
 <body>
@@ -364,7 +365,6 @@
     <select name="role" id="role">
         <?php 
             if($_SESSION['role'] == "admin"){
-                echo "<option value='all'>All</option>";
                 echo "<option value='student'>Student</option>";
                 echo "<option value='admin'>Admin</option>";
                 echo "<option value='deactivated'>Deactivated</option>";
@@ -383,14 +383,15 @@
             // Get the selected role from the form
             $selectedRole = $_POST['role'];
             // Query to fetch users based on the selected role
-            if($selectedRole == "all"){
-                $sql = "SELECT * FROM users";
-            }else if($selectedRole == "own"){
+            if($selectedRole == "own"){
                 $ownUIN = $_SESSION['UIN'];
                 $sql = "SELECT * FROM users WHERE UIN = $ownUIN";
-            }else{
-                $sql = "SELECT * FROM users WHERE User_Type = '$selectedRole'";
+            }else if($selectedRole == 'student'){
+                $sql = "SELECT * FROM student_users";
+            }else if($selectedRole == 'admin'){
+                $sql = "SELECT * FROM admin_users";      
             }
+
             $result = $conn->query($sql);
         
             if ($result->num_rows > 0) {

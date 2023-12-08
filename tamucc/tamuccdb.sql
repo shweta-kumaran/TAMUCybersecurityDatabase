@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 08, 2023 at 10:34 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Dec 08, 2023 at 10:33 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `tamuccdb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `admin_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `admin_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
 
 -- --------------------------------------------------------
 
@@ -294,6 +312,24 @@ INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `student_users`
+-- (See below for the actual view)
+--
+CREATE TABLE `student_users` (
+`UIN` int(11)
+,`First_Name` varchar(255)
+,`M_Initial` varchar(1)
+,`Last_Name` varchar(255)
+,`Username` varchar(150)
+,`Passwords` varchar(255)
+,`User_Type` varchar(50)
+,`Email` varchar(150)
+,`Discord_Name` varchar(150)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `track`
 --
 
@@ -329,7 +365,17 @@ INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, 
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
 (2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
 (4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
-(5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678');
+(5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678'),
+(8, 'John', NULL, 'Doe', 'johndoe1', 'password', 'admin', 'johndoe@gmail.com', 'johndoe2023');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `admin_users`
+--
+DROP TABLE IF EXISTS `admin_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'admin' ;
 
 -- --------------------------------------------------------
 
@@ -348,6 +394,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `student_users`
+--
+DROP TABLE IF EXISTS `student_users`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `student_users`  AS SELECT `users`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`M_Initial` AS `M_Initial`, `users`.`Last_Name` AS `Last_Name`, `users`.`Username` AS `Username`, `users`.`Passwords` AS `Passwords`, `users`.`User_Type` AS `User_Type`, `users`.`Email` AS `Email`, `users`.`Discord_Name` AS `Discord_Name` FROM `users` WHERE `users`.`User_Type` = 'student' ;
 
 --
 -- Indexes for dumped tables
