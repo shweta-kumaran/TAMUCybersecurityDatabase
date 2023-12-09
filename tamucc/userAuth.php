@@ -418,6 +418,7 @@
             echo "<th>Last Name</th>";
             echo "<th>Email</th>";
             echo "<th>Role</th>";
+            echo "<th>Discord Name</th>";
             if ($selectedRole == 'student' || collegestudentExists($ownUIN, $conn)) {
                 echo "<th>Gender</th>";
                 echo "<th>GPA</th>";
@@ -441,6 +442,7 @@
                     echo "<td>" . $row["Last_Name"] . "</td>";
                     echo "<td>" . $row["Email"] . "</td>";
                     echo "<td>" . $row["User_Type"] . "</td>";
+                    echo "<td>" . $row["Discord_Name"] . "</td>";
                     if ($row["User_Type"] == "student") {
                         // Fetch student details and output
                         $studentUIN = $row["UIN"];
