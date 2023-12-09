@@ -58,6 +58,11 @@
     <title>Document</title>
 </head>
 <body>
+
+    <div class="header">
+        <h1>Cybersecurity Center Student Tracking and Reporting</h1>
+    </div>
+    
     <form action="" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
@@ -67,6 +72,8 @@
 
         <button type="submit">Submit</button>
     </form>
+
+    <a href = 'studentSignUp.php'>Students sign up here!</a> <br>
 
     <?php
         if(isset($_SESSION['role'])){

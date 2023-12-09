@@ -1,7 +1,8 @@
-/* Style the header */
+/* color scheme: https://colorhunt.co/palette/f3eeeaebe3d5b0a695776b5d */
 .header {
    background-color: #776B5D;
    padding: 2%;
+   margin: 2%;
    text-align: center;
  }
 
@@ -23,9 +24,33 @@ body {
 
  form {
    background-color: #B0A695;
-   padding:1%;
+   padding:2%;
    width:fit-content;
+   font-size: large;
+   line-height: 1.5;
 
+ }
+
+ input[type=submit]{
+   background-color: grey;
+   border: none;
+   color: white;
+   padding: 1.5% 3%;
+   text-decoration: none;
+   margin: 1%;
+   cursor: pointer;
+   font-weight: bold;
+ }
+
+ button {
+   background-color: grey;
+   border: none;
+   color: white;
+   padding: 1.5% 3%;
+   text-decoration: none;
+   margin: 1%;
+   cursor: pointer;
+   font-weight: bold;
  }
 
  a:link, a:visited {
