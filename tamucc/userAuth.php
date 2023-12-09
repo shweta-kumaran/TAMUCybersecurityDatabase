@@ -61,6 +61,7 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="index.php">Home</a> <br>
     <h1>Insertion</h1>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
