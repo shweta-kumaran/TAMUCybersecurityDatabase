@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 11:13 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Dec 09, 2023 at 01:28 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,18 @@ SET time_zone = "+00:00";
 --
 -- Database: `tamuccdb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `active_programs`
+-- (See below for the actual view)
+--
+CREATE TABLE `active_programs` (
+`Program_Num` int(10)
+,`Prog_Name` varchar(255)
+,`Prog_Des` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -59,7 +71,6 @@ CREATE TABLE `application` (
 --
 
 INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
-(5, 3, 2, 'cert', 'cert', 'cert'),
 (7, 3, 5, 'cert', 'cert', 'cert\r\n'),
 (8, 3, 2, NULL, NULL, '');
 
@@ -193,7 +204,6 @@ INSERT INTO `documentation` (`Doc_Num`, `App_Num`, `Link`, `Doc_Type`) VALUES
 (1, 1, 'doc.com', 'google doc'),
 (2, 2, 'onedrive.com', 'onedrive'),
 (3, 3, 'doc1.com', 'drive'),
-(4, 5, 'link', 'doc'),
 (6, 8, 'docforapp6.com', 'pdf'),
 (7, 8, 'docforapp8.com', 'EXCEL'),
 (8, 7, 'janedoc.doc', 'docx'),
@@ -315,17 +325,18 @@ CREATE TABLE `intern_app` (
 CREATE TABLE `programs` (
   `Program_Num` int(10) NOT NULL,
   `Prog_Name` varchar(255) NOT NULL,
-  `Prog_Des` varchar(255) NOT NULL
+  `Prog_Des` varchar(255) NOT NULL,
+  `Prog_Access` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `programs`
 --
 
-INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
-(1, 'Program one', 'the program that is one'),
-(2, 'program 2', '2'),
-(3, 'program 3', '3');
+INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) VALUES
+(1, 'Program one', 'the program that is one', 1),
+(2, 'program 2', '2', 0),
+(3, 'program 3', '3', 1);
 
 -- --------------------------------------------------------
 
@@ -381,10 +392,19 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`) VALUES
 (1, 'Admin', NULL, 'User', 'admin', 'admin', 'admin', 'admin@example.com', 'admin#1234'),
-(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'student', 'john.doe@example.com', 'john.doe#5678'),
+(2, 'John', 'M', 'Doe', 'john.doe', 'password', 'Student', 'john.doe@example.com', 'john.doe#5678'),
 (4, 'Admin', NULL, 'User', 'admin2', 'admin2', 'admin', 'admin@example.com', 'admin#1234'),
 (5, 'Jane', 'M', 'Doe', 'Jane.doe', 'password', 'student', 'Jane.doe@example.com', 'Jane.doe#5678'),
 (8, 'John', NULL, 'Doe', 'johndoe1', 'password', 'admin', 'johndoe@gmail.com', 'johndoe2023');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `active_programs`
+--
+DROP TABLE IF EXISTS `active_programs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `active_programs`  AS SELECT `programs`.`Program_Num` AS `Program_Num`, `programs`.`Prog_Name` AS `Prog_Name`, `programs`.`Prog_Des` AS `Prog_Des` FROM `programs` WHERE `programs`.`Prog_Access` = 1 ;
 
 -- --------------------------------------------------------
 
