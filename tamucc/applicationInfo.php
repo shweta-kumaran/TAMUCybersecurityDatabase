@@ -41,11 +41,12 @@
     <h1>Submit an Application</h1>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
-    
+        
         <label for="prog">Program you wish to apply to:</label>
         <select name = "programName" id = "programName">
         <?php
-            $query = "SELECT * FROM programs";
+            //used a view active_programs
+            $query = "SELECT * FROM active_programs";
             $result = $conn->query($query);
             if($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
@@ -93,7 +94,7 @@
 
 
 
-<h1>Update a Program</h1>
+<h1>Update a Application</h1>
 
 <form method="post" action="">
     <input type="hidden" name="form_id" value="update">
@@ -152,7 +153,7 @@
         <input type="hidden" name="form_id" value="select">
         <label for="role">Select All Applications or a Application Num :</label>
         <select name = "select_appNum" id = "select_appNum">
-            <option value = "all"> All applications submitted </option>
+            <option value = "all">All</option>
             <?php
                 $query = "SELECT * FROM `application` WHERE UIN = ?";
                 $stmt = $conn->prepare($query);
@@ -174,17 +175,17 @@
             if($formID == "select"){
                 $selectedID = $_POST['select_appNum'];
                 if ( $selectedID == "all" ) {
-                    $stmt = "SELECT * FROM `application` WHERE UIN = ?";
+                    $query = "SELECT * FROM `application` WHERE UIN = ?";
                     $stmt = $conn->prepare($query);
                     $stmt->bind_param("i", $_SESSION['UIN']);
                 } else {
-                    $stmt = "SELECT * FROM `application` WHERE App_Num = ?";
+                    $query = "SELECT * FROM `application` WHERE UIN = ? AND App_Num = ?";
                     $stmt = $conn->prepare($query);
-                    $stmt->bind_param("s", $selectedID);
+                    $stmt->bind_param("ii", $_SESSION['UIN'], $selectedID);
                 }
                 $stmt->execute();
                 $result = $stmt->get_result();
-            
+        
                 while ($row = $result->fetch_assoc()) {
                     echo "Application Num: " . $row["App_Num"] ." - Program Num: " . $row["Program_Num"] ." - Uncompleted Certification Description: " . $row["Uncom_Cert"] . " - Completed Certification Description: " . $row["Uncom_Cert"]. " - Purpose Statement: " . $row["Purpose_Statement"];
                     echo "<br>";
@@ -195,6 +196,51 @@
                 }
             }
     ?>
+
+<h1>Delete a Application</h1>
+
+<form method='post' action=''>
+    <label for="role">Select a Application Num:</label>
+    <input type='hidden' name='form_id' value='delete'>
+    <select name = "select_appNum" id = "select_appNum">
+        <?php
+            $query = "SELECT * FROM `application` WHERE UIN = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $_SESSION['UIN']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while($row = $result->fetch_assoc()) {
+                echo "<option value='" . $row["App_Num"] . "'>" . $row["App_Num"] . "</option>";
+            }
+            $stmt->close();
+        ?>
+    </select>
+    <input type ='submit' value='Delete Application'> 
+</form>
+
+<?php
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $formId = $_POST['form_id'];
+    if($formId == 'delete'){
+        $appToChange = $_POST['select_appNum'];
+        $stmt = $conn->prepare("DELETE FROM `documentation` WHERE App_Num = ?");
+        $stmt->bind_param("i", $appToChange);
+        $stmt->execute();
+
+        $sql = "DELETE FROM `application` WHERE App_Num = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $appToChange);
+        if ($stmt->execute() === TRUE) {
+            echo "$appToChange deleted.";
+        } else {
+            echo "Error deleting program." . $stmt->error;
+        }
+        $stmt->close();
+    }
+}
+?>
+
 
 </body>
 </html>

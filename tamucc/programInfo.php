@@ -15,6 +15,7 @@
     }
 
     function programExists($newName, $conn) {
+        // an index exists prog_name_idx
         $stmt = $conn->prepare("SELECT * FROM programs WHERE Prog_Name = ?");
         $stmt->bind_param("s", $newName);  
         $stmt->execute();
@@ -147,8 +148,8 @@
         <input type="hidden" name="form_id" value="select">
         <label for="role">Select All Programs or a Program Num :</label>
         <select name = "select_program_Num" id = "select_program_Num">
-            <option value = "all"> All events </option>
-
+            <option value = "all"> All Programs </option>
+            <option value = "all"> Active Programs </option>
             <?php
                 $query = "SELECT * FROM programs";
                 $result = $conn->query($query);
