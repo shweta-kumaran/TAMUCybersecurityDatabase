@@ -57,7 +57,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Add a New Program</h1>
+    <div class="header">
+        <h1>Add a New Program</h1>
+        <a href="index.php">Home</a>
+    </div>
     <form method="post" action="programInfo.php">
         <input type="hidden" name="form_id" value="insert">
     

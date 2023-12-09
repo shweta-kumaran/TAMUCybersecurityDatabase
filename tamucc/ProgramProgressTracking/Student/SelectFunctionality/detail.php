@@ -47,9 +47,13 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 <html>
 <head>
     <title>Detail Page</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-    <h1>Details</h1>
+    <div class="header">
+        <h1>Details</h1>
+        <a href="index.php">Home</a>
+    </div>
     <?php if ($item): ?>
         <?php foreach($item as $key => $value): ?>
             <p><strong><?= $key ?>:</strong> <?= $value ?></p>

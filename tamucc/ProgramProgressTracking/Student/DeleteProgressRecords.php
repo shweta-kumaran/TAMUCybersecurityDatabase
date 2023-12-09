@@ -73,9 +73,13 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
     <title>Delete Progress Records</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-    <h1>Delete Progress Records</h1>
+    <div class="header">
+        <h1>Delete Progress Records</h1>
+        <a href="index.php">Home</a>
+    </div>
     <form action="" method="post">
         <select name="recordType">
             <option value="classes">Class</option>

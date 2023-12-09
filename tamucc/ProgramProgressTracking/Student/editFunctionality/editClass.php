@@ -45,10 +45,13 @@ $result = fetchClasses($conn);
 <html>
 <head>
     <title>Edit Class</title>
+    <link rel="stylesheet" href="includes/styles.css">
 </head>
 <body>
-
-<h2>Select a Class to Edit</h2>
+    <div class="header">
+        <h2>Select a Class to Edit</h2>
+        <a href="index.php">Home</a>
+    </div>
 
 <form action="" method="post">
     <label for="class_id">Select Class:</label>

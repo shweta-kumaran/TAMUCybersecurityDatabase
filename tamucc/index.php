@@ -79,7 +79,7 @@
         if(isset($_SESSION['role'])){
             echo "<h3 class='welcome'>Welcome " . $_SESSION['user_id'] . " (" . $_SESSION['UIN'] .  ")! You are logged in as a " . $_SESSION['role'] . "</h3><br>";
         }else{
-            echo "Pleaes log in!";
+            echo "Please log in!";
         }
     ?>
 
