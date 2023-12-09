@@ -62,7 +62,8 @@
 </head>
 <body>
     <a href="index.php">Home</a> <br>
-    <h1>Insertion</h1>
+    <h1>User Management and Authentication</h1>
+    <h2>Insertion</h2>
     <form method="post" action="">
         <input type="hidden" name="form_id" value="insert">
     
@@ -277,7 +278,7 @@
     }
 ?>
 
-<h1>Updates</h2>
+<h2>Updates</h2>
 <!-- Form 2 -->
     <form method="post" action="">
         <input type="hidden" name="form_id" value="update">
@@ -362,7 +363,7 @@
     ?>
 
 <!-- Form 3 -->
-<h1>Selection</h1>
+<h2>Selection</h2>
 <form method="post" action="">
     <input type="hidden" name="form_id" value="select">
 
@@ -422,7 +423,7 @@
     }
 ?>
 <!-- Form 4 -->
-<h1>Deletion</h1>
+<h2>Deletion</h2>
     <?php
         if($_SESSION['role'] == 'admin'){
             echo "<form method='post' action=''>";
