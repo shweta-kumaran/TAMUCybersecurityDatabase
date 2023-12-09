@@ -2,6 +2,7 @@
     include_once 'includes/dbh.inc.php';
     session_start();
 
+    // This function determines if a UIN exists in the user table.
     function userExists($uin, $conn) {
         // Prepare the statement
         $stmt = $conn->prepare("SELECT UIN FROM users WHERE UIN = ?");
@@ -19,6 +20,7 @@
         $stmt->close();
     }
 
+    // This function determines if a UIN exists in the collegestudents subtable. 
     function collegestudentExists($uin, $conn) {
         // Prepare the statement
         $stmt = $conn->prepare("SELECT UIN FROM collegestudents WHERE UIN = ?");
@@ -36,6 +38,7 @@
         $stmt->close();
     }
 
+    // Determines if a column exists in a given table. 
     function columnExists($tableName, $columnName, $conn) {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
@@ -50,6 +53,8 @@
         $exists = $result->fetch_row()[0] > 0;
         return $exists;
     }
+
+    // Used ChatGPT to generate some of the SQL queries
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -289,6 +294,13 @@
     }
 ?>
 
+
+
+
+
+
+
+
 <h2>Updates</h2>
 <!-- Form 2 -->
     <form method="post" action="">
@@ -304,7 +316,7 @@
         }
 
         ?>
-
+        <!-- The below changes the options available based on if admin or student -->
         <label for="columnToChange">Attribute to Change:</label>
         <select name="columnToChange" id="columnToChange">
             <?php
@@ -372,6 +384,12 @@
             }
         }
     ?>
+
+
+
+
+
+
 
 <!-- Form 3 -->
 <h2>Selection</h2>
@@ -470,6 +488,11 @@
         }
     }
 ?>
+
+
+
+
+
 <!-- Form 4 -->
 <h2>Deletion</h2>
     <?php
