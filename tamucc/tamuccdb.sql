@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 09, 2023 at 01:28 AM
+-- Generation Time: Dec 09, 2023 at 02:40 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -341,6 +341,16 @@ INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) V
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `program_names`
+-- (See below for the actual view)
+--
+CREATE TABLE `program_names` (
+`Prog_Name` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `student_users`
 -- (See below for the actual view)
 --
@@ -367,6 +377,15 @@ CREATE TABLE `track` (
   `Program_Num` int(11) NOT NULL,
   `Student_Num` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `track`
+--
+
+INSERT INTO `track` (`Tracking_Num`, `Program_Num`, `Student_Num`) VALUES
+(1, 1, 2),
+(2, 2, 2),
+(3, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -441,6 +460,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `program_names`
+--
+DROP TABLE IF EXISTS `program_names`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `program_names`  AS SELECT `programs`.`Prog_Name` AS `Prog_Name` FROM `programs` ;
 
 -- --------------------------------------------------------
 
@@ -570,7 +598,7 @@ ALTER TABLE `documentation`
 -- AUTO_INCREMENT for table `track`
 --
 ALTER TABLE `track`
-  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

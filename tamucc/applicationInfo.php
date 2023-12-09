@@ -1,4 +1,7 @@
 <?php
+//Shweta Kumaran
+// view active_programs
+// index App_Num
     include_once 'includes/dbh.inc.php';
     session_start();
 

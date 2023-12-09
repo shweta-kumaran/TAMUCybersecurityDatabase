@@ -1,4 +1,7 @@
 <?php
+//Shweta Kumaran
+//view active_programs and program_names
+//index prog_name_idx
     include_once 'includes/dbh.inc.php';
     session_start();
 
@@ -30,7 +33,7 @@
 
     function programNumExists($newNum, $conn)
     {
-        $stmt = $conn->prepare("SELECT * FROM programs WHERE Program_Num = ?");
+        $stmt = $conn->prepare("SELECT * FROM program_names WHERE Program_Num = ?");
         $stmt->bind_param("i", $newNum);
         $stmt->execute();
         $stmt->store_result();
@@ -150,7 +153,7 @@
         <label for="role">Select All Programs or a Program Num :</label>
         <select name = "select_program_Num" id = "select_program_Num">
             <option value = "all"> All Programs </option>
-            <option value = "all"> Active Programs </option>
+            <option value = "aall"> Active Programs </option>
             <?php
                 $query = "SELECT * FROM programs";
                 $result = $conn->query($query);
@@ -171,13 +174,16 @@
                 $selectedID = $_POST['select_program_Num'];
                 if ( $selectedID == "all" ) {
                     $sqlSelect = "SELECT * FROM programs";
-                } else {
+                } else if ($selectedID == "aall")
+                {
+                    $sqlSelect = "SELECT * FROM active_programs";
+                } 
+                else {
                     $sqlSelect = "SELECT * FROM programs WHERE Program_Num = '$selectedID'";
                 }
                 $result = $conn->query($sqlSelect);
             
                 if ($result->num_rows > 0) {
-                    // Output data of each event
                     while ($row = $result->fetch_assoc()) {
                         echo "Program ID: " . $row["Program_Num"] ." - Program Name: " . $row["Prog_Name"] ." - Program Description: " . $row["Prog_Des"] ;
                         echo "<br>";
