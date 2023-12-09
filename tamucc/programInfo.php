@@ -19,7 +19,7 @@
 
     function programExists($newName, $conn) {
         // an index exists prog_name_idx
-        $stmt = $conn->prepare("SELECT * FROM programs WHERE Prog_Name = ?");
+        $stmt = $conn->prepare("SELECT * FROM program_names WHERE Prog_Name = ?");
         $stmt->bind_param("s", $newName);  
         $stmt->execute();
         $stmt->store_result();
@@ -33,7 +33,7 @@
 
     function programNumExists($newNum, $conn)
     {
-        $stmt = $conn->prepare("SELECT * FROM program_names WHERE Program_Num = ?");
+        $stmt = $conn->prepare("SELECT * FROM programs WHERE Program_Num = ?");
         $stmt->bind_param("i", $newNum);
         $stmt->execute();
         $stmt->store_result();
@@ -224,6 +224,7 @@
         if($formId == 'deactivate'){
             $programToChange = $_POST['select_program_Num'];
             if(programNumExists($programToChange, $conn)){
+                echo "1";
                 $sql = "UPDATE programs SET Prog_Access = 0 WHERE Program_Num = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $programToChange);
