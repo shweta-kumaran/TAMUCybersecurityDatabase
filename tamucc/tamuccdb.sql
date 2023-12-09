@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 09, 2023 at 04:43 AM
+-- Generation Time: Dec 09, 2023 at 05:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `tamuccdb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `active_programs`
+-- (See below for the actual view)
+--
+CREATE TABLE `active_programs` (
+`Program_Num` int(10)
+,`Prog_Name` varchar(255)
+,`Prog_Des` varchar(255)
+,`Prog_Access` int(11)
+);
 
 -- --------------------------------------------------------
 
@@ -61,7 +74,8 @@ CREATE TABLE `application` (
 INSERT INTO `application` (`App_Num`, `Program_Num`, `UIN`, `Uncom_Cert`, `Com_Cert`, `Purpose_Statement`) VALUES
 (5, 3, 2, 'cert', 'cert', 'cert'),
 (7, 3, 5, 'cert', 'cert', 'cert\r\n'),
-(8, 3, 2, NULL, NULL, '');
+(8, 3, 2, NULL, NULL, ''),
+(9, 1, 2, '', '', 'ps');
 
 -- --------------------------------------------------------
 
@@ -366,9 +380,19 @@ CREATE TABLE `programs` (
 --
 
 INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) VALUES
-(1, 'Program one', 'the program that is one', 1),
+(1, '1', 'the program that is one', 1),
 (2, 'program 2', '2', 0),
-(3, 'program 3', '3', 0);
+(3, 'program 3', '3', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `program_names`
+-- (See below for the actual view)
+--
+CREATE TABLE `program_names` (
+`Prog_Name` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -465,6 +489,15 @@ INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `active_programs`
+--
+DROP TABLE IF EXISTS `active_programs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `active_programs`  AS SELECT `programs`.`Program_Num` AS `Program_Num`, `programs`.`Prog_Name` AS `Prog_Name`, `programs`.`Prog_Des` AS `Prog_Des`, `programs`.`Prog_Access` AS `Prog_Access` FROM `programs` WHERE `programs`.`Prog_Access` = 1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `admin_users`
 --
 DROP TABLE IF EXISTS `admin_users`;
@@ -497,6 +530,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `program_names`
+--
+DROP TABLE IF EXISTS `program_names`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `program_names`  AS SELECT `programs`.`Prog_Name` AS `Prog_Name` FROM `programs` ;
 
 -- --------------------------------------------------------
 
@@ -605,7 +647,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `application`
 --
 ALTER TABLE `application`
-  MODIFY `App_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `App_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `certification`
@@ -636,6 +678,12 @@ ALTER TABLE `class_enrollment`
 --
 ALTER TABLE `documentation`
   MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `programs`
+--
+ALTER TABLE `programs`
+  MODIFY `Program_Num` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reports`
