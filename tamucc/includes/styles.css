@@ -1,0 +1,91 @@
+/* color scheme: https://colorhunt.co/palette/f3eeeaebe3d5b0a695776b5d */
+.header {
+   background-color: #776B5D;
+   padding: 2%;
+   margin: 2%;
+   text-align: center;
+ }
+
+body {
+   background-color:#F3EEEA;
+   margin:5%;
+ }
+
+ h1 {
+   color: black;
+ }
+ p {
+   color: black;
+ }
+
+ a {
+   margin:1%;
+ }
+
+ form {
+   background-color: #B0A695;
+   padding:2%;
+   width:fit-content;
+   font-size: large;
+   line-height: 1.5;
+
+ }
+
+ input[type=submit]{
+   background-color: grey;
+   border: none;
+   color: white;
+   padding: 1.5% 3%;
+   text-decoration: none;
+   margin: 1%;
+   cursor: pointer;
+   font-weight: bold;
+ }
+
+ button {
+   background-color: grey;
+   border: none;
+   color: white;
+   padding: 1.5% 3%;
+   text-decoration: none;
+   margin: 1%;
+   cursor: pointer;
+   font-weight: bold;
+ }
+
+ a:link, a:visited {
+   background-color: grey;
+   color: white;
+   padding: 1.5% 3%;
+   
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+ }
+ 
+ a:hover, a:active {
+   background-color: darkgrey;
+ }
+
+ .result {
+   color:black;
+   background-color: #EBE3D5;
+   padding:1%;
+   width:fit-content;
+   margin:1%;
+ }
+
+ .response {
+   background-color: #EBE3D5;
+   color:black;
+   padding:1%;
+   margin:1%;
+   width:fit-content;
+ }
+
+ .welcome {
+   background-color: #B0A695;
+   padding:1%;
+   width:fit-content;
+ }
+

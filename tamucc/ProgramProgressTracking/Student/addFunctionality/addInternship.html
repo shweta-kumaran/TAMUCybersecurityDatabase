@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Internship</title>
+</head>
+<body>
+    <h1>Add New Internship</h1>
+    <form action="addInternship.php" method="post">
+        <h2>Internship Details</h2>
+        <label for="internId">Internship ID:</label><br>
+        <input type="text" id="internId" name="internId"><br>
+
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="description">Description:</label><br>
+        <input type="text" id="description" name="description"><br>
+
+        <label for="isGov">Is Government (0 for No, 1 for Yes):</label><br>
+        <input type="number" id="isGov" name="isGov" min="0" max="1"><br>
+
+        <label for="iaNum">Internship Application Number:</label><br>
+        <input type="text" id="iaNum" name="iaNum"><br>
+
+        <label for="studentUIN">Student UIN:</label><br>
+        <input type="text" id="studentUIN" name="studentUIN"><br>
+
+        <label for="status">Status:</label><br>
+        <input type="text" id="status" name="status"><br>
+
+        <label for="year">Year:</label><br>
+        <input type="number" id="year" name="year"><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
