@@ -12,7 +12,7 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    echo "Connected successfully";
+    echo "Connected successfully <br>";
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
@@ -76,7 +76,7 @@
         }
     ?>
 
-    <a href="userAuth.php">User Authentication</a> <br>
+    <a href="userAuth.php">User Management and Authentication</a> <br>
     <a href="ProgramProgressTracking/Student/studentAccess.html">Program Progress Tracking</a> <br>
     <?php
         if($_SESSION['role'] == 'Student' or $_SESSION['role'] == 'student'){

@@ -73,6 +73,9 @@
         <label for="firstName">First Name:</label>
         <input type="text" name="firstName" id="firstName" value="John" required><br>
 
+        <label for="mInitial">Middle Initial:</label>
+        <input type="text" name="mInitial" id="mInitial" value=""><br>
+
         <label for="lastName">Last Name:</label>
         <input type="text" name="lastName" id="lastName" value="Doe" required><br>
         
@@ -185,6 +188,7 @@
         if($formId == "insert"){
             $newUIN = $_POST['UIN'];
             $newFirstName = $_POST['firstName'];
+            $newMiddleInitial = $_POST['mInitial'];
             $newLastName = $_POST['lastName'];
             $newUsername = $_POST['username'];
             $newPassword = $_POST['password'];
@@ -192,10 +196,14 @@
             $newEmail = $_POST['Email'];
             $newDiscord = $_POST['Discord'];
 
+            if($newMiddleInitial = ""){
+                $newMiddleInitial = NULL;
+            }
+
             if(!userExists($newUIN, $conn)){
 
                 $baseSql = "INSERT INTO `users` (`UIN`, `First_Name`, `M_Initial`, `Last_Name`, `Username`, `Passwords`, `User_Type`, `Email`, `Discord_Name`)
-            VALUES ($newUIN, '$newFirstName', NULL, '$newLastName', '$newUsername', '$newPassword', '$newUsertype', '$newEmail', '$newDiscord')";
+            VALUES ($newUIN, '$newFirstName', '$newMiddleInitial', '$newLastName', '$newUsername', '$newPassword', '$newUsertype', '$newEmail', '$newDiscord')";
 
                 if ($conn->query($baseSql) === TRUE) {
                     echo "Inserted $newUsertype $newFirstName $newLastName with the username $newUsername";
@@ -396,6 +404,8 @@
                 $sql = "SELECT * FROM student_users";
             }else if($selectedRole == 'admin'){
                 $sql = "SELECT * FROM admin_users";      
+            }else{
+                $sql = "SELECT * FROM deactivated_users";
             }
 
             $result = $conn->query($sql);
@@ -403,7 +413,7 @@
             if ($result->num_rows > 0) {
                 // Output data of each user
                 while ($row = $result->fetch_assoc()) {
-                    echo "User ID: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
+                    echo "UIN: " . $row["UIN"] . " - Name: " . $row["First_Name"] . " - Email: " . $row["Email"] . " - Role: " . $row["User_Type"];
                     if($row["User_Type"] == "student"){
                         $studentUIN = $row["UIN"];
                         $studentSql = "SELECT * FROM collegestudents WHERE UIN=$studentUIN";
