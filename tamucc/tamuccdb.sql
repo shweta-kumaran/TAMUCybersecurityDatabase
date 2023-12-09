@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 11:13 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Dec 09, 2023 at 04:43 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -76,8 +76,12 @@ CREATE TABLE `certification` (
   `Cert_Des` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `certification`
+--
+
 INSERT INTO `certification` (`Cert_ID`, `Cert_Level`, `Cert_Name`, `Cert_Des`) VALUES
-(1234, 'B', 'CPR' , 'Recuscitation 101');
+(1234, 'B', 'CPR', 'Recuscitation 101');
 
 -- --------------------------------------------------------
 
@@ -96,8 +100,13 @@ CREATE TABLE `cert_enrollment` (
   `Cert_Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cert_enrollment`
+--
+
 INSERT INTO `cert_enrollment` (`CertE_Num`, `UIN`, `Cert_ID`, `Stat`, `Training_Stat`, `Program_Num`, `Semester`, `Cert_Year`) VALUES
 (12345, 2, 1234, 'C', 'C', 5, 'F', 2023);
+
 -- --------------------------------------------------------
 
 --
@@ -111,8 +120,12 @@ CREATE TABLE `classes` (
   `Class_Type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `classes`
+--
+
 INSERT INTO `classes` (`Class_ID`, `Class_Name`, `Class_Desc`, `Class_Type`) VALUES
-(310, 'Databases', 'Intro to SQL' , 'F');
+(310, 'Databases', 'Intro to SQL', 'F');
 
 -- --------------------------------------------------------
 
@@ -129,8 +142,12 @@ CREATE TABLE `class_enrollment` (
   `Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `class_enrollment` (`CE_Num`, `UIN`, `Class_ID`, `Stat`, `Semester`,`Year` ) VALUES
-(1, 2, 310 , 'C', 'S', 2024);
+--
+-- Dumping data for table `class_enrollment`
+--
+
+INSERT INTO `class_enrollment` (`CE_Num`, `UIN`, `Class_ID`, `Stat`, `Semester`, `Year`) VALUES
+(1, 2, 310, 'C', 'S', 2024);
 
 -- --------------------------------------------------------
 
@@ -303,8 +320,13 @@ CREATE TABLE `internship` (
   `is_Gov` binary(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `internship`
+--
+
 INSERT INTO `internship` (`Intern_ID`, `Name`, `Description`, `is_Gov`) VALUES
-(1234, 'Microsoft' , 'SWE', '0');
+(1234, 'Microsoft', 'SWE', 0x30);
+
 -- --------------------------------------------------------
 
 --
@@ -319,8 +341,13 @@ CREATE TABLE `intern_app` (
   `Year` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `intern_app` (`IA_num`, `UIN`, `Intern_ID`, `Status`, `Year`) VALUES
-(001234, 2, 1234, 'C' , '2023');
+--
+-- Dumping data for table `intern_app`
+--
+
+INSERT INTO `intern_app` (`IA_Num`, `UIN`, `Intern_ID`, `Status`, `Year`) VALUES
+(1234, 2, 1234, 'C', 2023);
+
 -- --------------------------------------------------------
 
 --
@@ -330,17 +357,42 @@ INSERT INTO `intern_app` (`IA_num`, `UIN`, `Intern_ID`, `Status`, `Year`) VALUES
 CREATE TABLE `programs` (
   `Program_Num` int(10) NOT NULL,
   `Prog_Name` varchar(255) NOT NULL,
-  `Prog_Des` varchar(255) NOT NULL
+  `Prog_Des` varchar(255) NOT NULL,
+  `Prog_Access` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `programs`
 --
 
-INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`) VALUES
-(1, 'Program one', 'the program that is one'),
-(2, 'program 2', '2'),
-(3, 'program 3', '3');
+INSERT INTO `programs` (`Program_Num`, `Prog_Name`, `Prog_Des`, `Prog_Access`) VALUES
+(1, 'Program one', 'the program that is one', 1),
+(2, 'program 2', '2', 0),
+(3, 'program 3', '3', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `program_student_counts`
+-- (See below for the actual view)
+--
+CREATE TABLE `program_student_counts` (
+`Prog_Name` varchar(255)
+,`StudentCount` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `report_id` int(11) NOT NULL,
+  `report_name` varchar(255) NOT NULL,
+  `report_content` text DEFAULT NULL,
+  `creation_date` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -372,19 +424,16 @@ CREATE TABLE `track` (
   `Student_Num` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `track`
+--
+
 INSERT INTO `track` (`Tracking_Num`, `Program_Num`, `Student_Num`) VALUES
 (1, 1, 2),
 (2, 2, 2),
 (3, 3, 5);
 
 -- --------------------------------------------------------
-
-CREATE TABLE reports (
-    report_id INT AUTO_INCREMENT PRIMARY KEY,
-    report_name VARCHAR(255) NOT NULL,
-    report_content TEXT,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
 
 --
 -- Table structure for table `users`
@@ -448,6 +497,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `event_attendance`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `event_attendance`  AS SELECT `event_tracking`.`Event_ID` AS `Event_ID`, `event_tracking`.`UIN` AS `UIN`, `users`.`First_Name` AS `First_Name`, `users`.`Last_Name` AS `Last_Name` FROM (`event_tracking` join `users` on(`event_tracking`.`UIN` = `users`.`UIN`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `program_student_counts`
+--
+DROP TABLE IF EXISTS `program_student_counts`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `program_student_counts`  AS SELECT `p`.`Prog_Name` AS `Prog_Name`, count(`t`.`Student_Num`) AS `StudentCount` FROM (`programs` `p` join `track` `t` on(`p`.`Program_Num` = `t`.`Program_Num`)) GROUP BY `p`.`Prog_Name` ;
 
 -- --------------------------------------------------------
 
@@ -518,25 +576,11 @@ ALTER TABLE `programs`
   ADD PRIMARY KEY (`Program_Num`),
   ADD KEY `prog_name_idx` (`Prog_Name`);
 
--- Structure for view `program_student_counts`
 --
-DROP VIEW IF EXISTS `program_student_counts`;
-
-CREATE ALGORITHM=UNDEFINED 
-DEFINER=`root`@`localhost` 
-SQL SECURITY DEFINER 
-VIEW `program_student_counts` AS 
-SELECT 
-    p.Prog_Name AS `Prog_Name`,
-    COUNT(t.Student_Num) AS `StudentCount`
-FROM 
-    `programs` p
-JOIN 
-    `track` t ON p.Program_Num = t.Program_Num
-GROUP BY 
-    p.Prog_Name;
-
+-- Indexes for table `reports`
 --
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`report_id`);
 
 --
 -- Indexes for table `track`
@@ -567,25 +611,25 @@ ALTER TABLE `application`
 -- AUTO_INCREMENT for table `certification`
 --
 ALTER TABLE `certification`
-  MODIFY `Cert_ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Cert_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1235;
 
 --
 -- AUTO_INCREMENT for table `cert_enrollment`
 --
 ALTER TABLE `cert_enrollment`
-  MODIFY `CertE_Num` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `CertE_Num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12346;
 
 --
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `Class_ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Class_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=311;
 
 --
 -- AUTO_INCREMENT for table `class_enrollment`
 --
 ALTER TABLE `class_enrollment`
-  MODIFY `CE_Num` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `CE_Num` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `documentation`
@@ -594,10 +638,16 @@ ALTER TABLE `documentation`
   MODIFY `Doc_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `track`
 --
 ALTER TABLE `track`
-  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Tracking_Num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
