@@ -12,6 +12,35 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Function to check if an index exists
+function indexExists($conn, $table, $indexName) {
+    $sql = "SHOW INDEX FROM " . $table . " WHERE Key_name = '" . $indexName . "'";
+    $result = $conn->query($sql);
+    return ($result && $result->num_rows > 0);
+}
+
+
+function createIndexes($conn) {
+    $tables = ["internship", "certification", "classes"];
+    if (False)
+    {
+        foreach ($tables as $table) {
+            $indexName = "idx_" . $table . "_ID";
+            $columnToIndex = $table . "_ID"; // Correct column name
+            
+            if (!indexExists($conn, $table, $indexName)) {
+                $sql = "CREATE INDEX " . $indexName . " ON " . $table . " (" . $columnToIndex . ")";
+                $conn->query($sql);
+            }
+        }
+    }
+    
+}
+
+
+// Call the createIndexes function to create indexes if needed
+createIndexes($conn);
+
 function fetchAll($conn, $table) {
     $sql = "SELECT * FROM " . $table;
     return $conn->query($sql);
